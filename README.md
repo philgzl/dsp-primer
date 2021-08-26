@@ -304,8 +304,8 @@ Y = np.fft.fft(y, n=len(z))  # forcing the FFT output to be same length as z
 Z1 = np.fft.fft(z)
 Z2 = X*Y
 
-axes[0].plot(abs(Z1), label=r'<img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(x*y)">')
-axes[0].plot(abs(Z2), label=r'<img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(x)\mathcal{F}(y)">')
+axes[0].plot(abs(Z1), label=r'$\mathcal{F}(x*y)$')
+axes[0].plot(abs(Z2), label=r'$\mathcal{F}(x)\mathcal{F}(y)$')
 axes[0].legend(loc='upper right')
 
 # second property: F(xy)=F(x)*F(y)
@@ -325,8 +325,8 @@ Z1 = np.fft.fftshift(Z1)
 Z2 = np.convolve(X, Y)/n
 Z2 = Z2[n//2:-n//2+1]  # discard extra frequencies created from the convolution
 
-axes[1].plot(abs(Z1), label=r'<img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(xy)">')
-axes[1].plot(abs(Z2), label=r'<img src="https://render.githubusercontent.com/render/math?math=\frac{1}{N}\mathcal{F}(x)*\mathcal{F}(y)">')
+axes[1].plot(abs(Z1), label=r'$\mathcal{F}(xy)$')
+axes[1].plot(abs(Z2), label=r'$\frac{1}{N}\mathcal{F}(x)*\mathcal{F}(y)$')
 axes[1].legend(loc='upper right')
 
 plt.show()  # you should observe the curves overlap in both plots
@@ -363,7 +363,7 @@ for ax, fs_lo in zip(axes, [1000, 500, 200]):
     x_coarse = np.sin(2*np.pi*f0*t_coarse)
     ax.stem(t_coarse, x_coarse, 'k', markerfmt='ko', basefmt=' ')
     ax.axhline(0, color='k')
-    ax.set_title(f'<img src="https://render.githubusercontent.com/render/math?math=f_s={fs_lo}"> Hz')
+    ax.set_title(f'$f_s={fs_lo}$ Hz')
 
 plt.show()
 ```
@@ -384,10 +384,10 @@ f0 = 100
 f1 = 80
 
 x_cont = np.cos(2*np.pi*f0*t_cont)
-ax.plot(t_cont, x_cont, label=f'<img src="https://render.githubusercontent.com/render/math?math=f_0={f0}"> Hz')
+ax.plot(t_cont, x_cont, label=f'$f_0={f0}$ Hz')
 
 x_cont = np.cos(2*np.pi*f1*t_cont)
-ax.plot(t_cont, x_cont, label=f'<img src="https://render.githubusercontent.com/render/math?math=f_1={f1}"> Hz')
+ax.plot(t_cont, x_cont, label=f'$f_1={f1}$ Hz')
 
 fs_lo = 180
 t_coarse = np.arange(0, T, 1/fs_lo)
@@ -395,7 +395,7 @@ x_coarse = np.cos(2*np.pi*f0*t_coarse)
 ax.stem(t_coarse, x_coarse, 'k', markerfmt='ko', basefmt=' ')
 ax.axhline(0, color='k')
 
-ax.set_title(f'<img src="https://render.githubusercontent.com/render/math?math=f_s={fs_lo}"> Hz')
+ax.set_title(f'$f_s={fs_lo}$ Hz')
 ax.legend()
 
 plt.show()

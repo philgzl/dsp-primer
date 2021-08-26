@@ -171,6 +171,8 @@ plt.show()  # you should see the more sines we add, the closer the total sum res
 
 # Fourier Transform
 
+## Continuous Fourier Transform
+
 The Fourier transform is a mathematical operation that decomposes functions depending on time into functions depending on frequency. The term *Fourier transform* can refer to both the frequency domain representation of a signal and the mathematical operation itself.
 
 The Fourier transform is first formally defined for continuous signals (not necessarily periodic) and outputs a new continuous function depending on frequency. It is commonly noted <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}"> and is defined as
@@ -191,19 +193,37 @@ A few notes/properties:
     * Sometimes it is noted like this to emphasize on the dependent variable, even though that's abusive for math purists: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}[x(t)] = X(\omega)">
 * The inverse Fourier transform of X is <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}^{-1}(X)(t) = \frac{1}{2\pi}\int_{-\infty}^{%2B\infty}X(\omega)e^{i\omega t}d\omega, \quad \forall t \in \mathbb{R},"> which is the same as the forward Fourier transform except there is a normalization factor and a plus sign in the exponential.
 
-This was all in the continuous domain so far. Now, there is as rigorous formalism that I will skip that allows to adapt the continuous Fourier transform to digital signals while keeping *most* of its properties. I will not go into the intricacies about the validity of these properties for discrete signals, but the properties are overall maintained and the mechanism of the Fourier transform is the same in both domains: we decompose signals into frequencies.
+This was all in the continuous domain so far. Now, there is as rigorous formalism that I will skip that allows to adapt the continuous Fourier transform to digital signals while keeping *most* of its properties. We first define the  discrete-time Fourier transform (DTFT), and then the discrete Fourier transform (DFT). I will go over this quickly without diving into the intricacies about how the validity of the properties are kept. But the properties are overall maintained and the underlying mechanism of all the Fourier transform variants is the same: we decompose signals into frequencies.
 
-Let <img src="https://render.githubusercontent.com/render/math?math=x[n]"> a discrete signal of length <img src="https://render.githubusercontent.com/render/math?math=N">. That is, we have a sequence of <img src="https://render.githubusercontent.com/render/math?math=N"> values <img src="https://render.githubusercontent.com/render/math?math=x[0], x[1], ..., x[N-1]">. The discrete Fourier transform (DFT) of <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is defined as
+### Discrete-Time Fourier Transform (DTFT)
+
+Let <img src="https://render.githubusercontent.com/render/math?math=x[n]"> a discrete signal with infinite length (not necessarily periodic). The discrete-time Fourier transform (DTFT) of <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is defined as
+
+<img src="https://render.githubusercontent.com/render/math?math=X(\omega) = \sum_{n=-\infty}^{%2B\infty}x[n]e^{-i\omega n}, \quad \forall \omega \in \mathbb{R}.">
+
+Again, this resembles a projection on the basis of complex exponentials, except it was adapted for a discrete signal by replacing the integration sign with a discrete sum over the signal values.
+
+The DTFT is <img src="https://render.githubusercontent.com/render/math?math=2\pi"> periodic. The inverse DTFT is
+
+<img src="https://render.githubusercontent.com/render/math?math=x[n] = \frac{1}{2\pi}\int_{2\pi}X(\omega)e^{i\omega n}d\omega, \quad \forall n \in \mathbb{Z}.">
+
+This is a first adaptation for discrete signals, except the summation is infinite and it still takes values in an infinite and continuous frequency space. The next step is to *truncate* and *sample* the DTFT at equidistant frequency points, which yields the discrete Fourier transform (DFT).
+
+### Discrete Fourier Transform (DFT)
+
+Let <img src="https://render.githubusercontent.com/render/math?math=x[n]"> a discrete signal of finite length <img src="https://render.githubusercontent.com/render/math?math=N">. That is, we have a sequence of <img src="https://render.githubusercontent.com/render/math?math=N"> values <img src="https://render.githubusercontent.com/render/math?math=x[0], x[1], ..., x[N-1]">. The discrete Fourier transform (DFT) of <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is defined as
 
 <img src="https://render.githubusercontent.com/render/math?math=X[k] = \sum_{n=0}^{N-1}x[n]e^{-i 2 \pi \frac{kn}{N}}, \quad \forall k \in \{0, 1, ..., N-1\}.">
-
-Again, this resembles a projection on the basis of complex exponentials, except it was adapted for a discrete and finite-length signal by replacing the integration sign with a discrete sum over the signal values.
 
 The inverse DFT is
 
 <img src="https://render.githubusercontent.com/render/math?math=x[n] = \frac{1}{N}\sum_{k=0}^{N-1}X[k]e^{i 2 \pi \frac{kn}{N}}, \quad \forall n \in \{0, 1, ..., N-1\}.">
 
-The discrete Fourier transform plays a huge role in DSP, and while the math theory behind can be difficult to fully grasp, it is absolutely essential to understand the gist of it: **it decomposes signals into frequencies**. The frequency components are best observed by plotting the (squared) modulus of the Fourier transform. The modulus or magnitude of the Fourier transform is often referred to as **spectrum**, and the analysis of signals using the Fourier transform as **spectral analysis**. The phase information is more difficult to interpret and can be disregarded for this course.
+The DFT takes as input a discrete and finite amount of values and output a discrete and finite amount of values, so it can be evaluated using computers, unlike the DTFT. Below is a table with an overview of the different transforms.
+
+![transforms](pics/transforms.png)
+
+The discrete Fourier transform plays a huge role in DSP, and while the math theory behind can be difficult to fully grasp, it is absolutely essential to understand the gist of it: **it decomposes signals into frequencies**. The frequency components are best observed by plotting the (squared) modulus of the Fourier transform. The modulus of the Fourier transform is often referred to as **magnitude spectrum**, and the analysis of signals using the Fourier transform as **spectral analysis**. The phase information is more difficult to interpret and can be disregarded for this course.
 
 The DFT is implemented in `numpy` under `numpy.fft.fft`. FFT stands for Fast Fourier Transform and is an optimized algorithm to calculate the DFT. The terms FFT and DFT are often used interchangeably.
 
@@ -244,10 +264,13 @@ A few practical notes here already:
     * This means that increasing <img src="https://render.githubusercontent.com/render/math?math=f_s"> gives a worse resolution in the frequency domain. **A finer resolution in the time domain means a coarser resolution in the frequency domain**. This is known as the **time-frequency duality**.
     * The frequency values corresponding to the raw FFT output are ordered as follows:
         * if N is even:
+
         <img src="https://render.githubusercontent.com/render/math?math=0,\ \frac{f_s}{N},\ ...,\ \frac{N}{2}\frac{f_s}{N},\ (-\frac{N}{2}%2B1)\frac{f_s}{N},\ ...,\ -\frac{f_s}{N}">
 
         * if N is odd:
+
         <img src="https://render.githubusercontent.com/render/math?math=0,\ \frac{f_s}{N},\ ...,\ \frac{N-1}{2}\frac{f_s}{N},\ -\frac{N-1}{2}\frac{f_s}{N},\ ...,\ -\frac{f_s}{N}">
+
       Yes, we first have the positive frequencies in increasing order up to <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}">, and then the negative frequencies increasing from <img src="https://render.githubusercontent.com/render/math?math=-\frac{f_s}{2}"> to 0. These frequency values are commonly called **frequency bins**, as if the energy was falling in *bins* centered at those frequencies. 
 
 FAQ:
@@ -533,8 +556,119 @@ A filter is a system that performs mathematical operations on a signal in the ti
 
 Filters can be analog for continuous signals (electronic circuits consisting of capacitors and coils in e.g. a guitar amps or speaker crossover filters), or digital for discrete signals (integrated circuits). In this course we will only cover digital filters.
 
-In DSP, filters are linear time-invariant (LTI) systems. Consider two digital signals <img src="https://render.githubusercontent.com/render/math?math=x[n]"> and <img src="https://render.githubusercontent.com/render/math?math=y[n]">. A system <img src="https://render.githubusercontent.com/render/math?math=\mathcal{H}"> is an LTI system if it verifies the following properties:
-* Linearity: <img src="https://render.githubusercontent.com/render/math?math=\forall\alpha,\beta\in\mathbb{R},\ \mathcal{H}(\alpha x%2B\beta y)=\alpha\mathcal{H}(x)%2B\beta\mathcal{H}(y)">
+In DSP, filters are linear time-invariant (LTI) systems. Consider two digital signals <img src="https://render.githubusercontent.com/render/math?math=x[n]"> and <img src="https://render.githubusercontent.com/render/math?math=y[n]">. For math purists, remember that <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is an abusive notation that refers to the function <img src="https://render.githubusercontent.com/render/math?math=x"> of the discrete dependent variable <img src="https://render.githubusercontent.com/render/math?math=n">, and not the value taken by <img src="https://render.githubusercontent.com/render/math?math=x"> on a single specific <img src="https://render.githubusercontent.com/render/math?math=n">. A system <img src="https://render.githubusercontent.com/render/math?math=\mathcal{H}"> is an LTI system if it verifies the following properties:
+* Linearity: <img src="https://render.githubusercontent.com/render/math?math=\forall\alpha,\beta\in\mathbb{R},\ \mathcal{H}(\alpha x[n]%2B\beta y[n])=\alpha\mathcal{H}(x[n])%2B\beta\mathcal{H}(y[n])">
+    * For math purists, this is the correct notation: <img src="https://render.githubusercontent.com/render/math?math=\forall\alpha,\beta\in\mathbb{R},\ \mathcal{H}(\alpha x%2B\beta y)=\alpha\mathcal{H}(x)%2B\beta\mathcal{H}(y)">
 * Time-invariance: <img src="https://render.githubusercontent.com/render/math?math=\forall m\in\mathbb{Z},\ \mathcal{H}(x[n-m])=\mathcal{H}(x)[n-m]">
-    * For math purists, this is the correct notation: <img src="https://render.githubusercontent.com/render/math?math=\forall m\in\mathbb{Z},\ \mathcal{H}(n\mapsto x[n-m])=\mathcal{H}(x)[n-m]">
+    * For math purists, this is the correct notation: <img src="https://render.githubusercontent.com/render/math?math=\forall m\in\mathbb{Z},\ \mathcal{H}(n\mapsto x[n-m])=n\mapsto\mathcal{H}(x)[n-m]">
     * In other words, this means LTI systems do not change over time; if the input is delayed, the output is also delayed by the same amount.
+
+In the following, <img src="https://render.githubusercontent.com/render/math?math=x[n]"> denotes the input of the filter, while <img src="https://render.githubusercontent.com/render/math?math=y[n]"> denotes the output of the filter.
+
+![filter](pics/filter.png)
+
+## Impulse response
+
+A filter can be described by its **impulse response**. The impulse response is, as the name suggests, the output of the filter when presented a Dirac impulse <img src="https://render.githubusercontent.com/render/math?math=\delta[n]">,
+
+<img src="https://render.githubusercontent.com/render/math?math=h[n] = \mathcal{H}(\delta[n]).">
+
+The reason why <img src="https://render.githubusercontent.com/render/math?math=h[n]"> describes the system follows. Since <img src="https://render.githubusercontent.com/render/math?math=\delta[n]"> is the identity element for the convolution, we have
+
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} y[n] %26= \mathcal{H}(x[n]) \\ %26= \mathcal{H}(x[n]*\delta[n]) %26%26 \delta\ \text{is the identity element}\\ %26= \mathcal{H}\big(\sum_{m=-\infty}^{%2B\infty}x[m]\delta[n-m])\big)\\ %26= \sum_{m=-\infty}^{%2B\infty}x[m]\mathcal{H}\big(\delta[n-m])\big) %26%26 \mathcal{H}\ \text{is linear}\\ %26= \sum_{m=-\infty}^{%2B\infty}x[m]h[n-m] %26%26 \mathcal{H}\ \text{is time-invariant}\\ %26= x[n]*h[n]. \end{aligned}">
+
+This means that if we know <img src="https://render.githubusercontent.com/render/math?math=h[n]">, we can derive the output <img src="https://render.githubusercontent.com/render/math?math=y[n]"> from the filter given an arbitrary input <img src="https://render.githubusercontent.com/render/math?math=x[n]"> by realizing the convolution of <img src="https://render.githubusercontent.com/render/math?math=x[n]"> with <img src="https://render.githubusercontent.com/render/math?math=h[n]">.
+
+## Difference equation
+
+A digital filter can also be described by its difference equation:
+
+<img src="https://render.githubusercontent.com/render/math?math=\sum_{m=0}^{N}a_my[n-m] = \sum_{m=0}^{M}b_mx[n-m],">
+
+or, if we want the output <img src="https://render.githubusercontent.com/render/math?math=y[n]"> isolated on the left side and assume <img src="https://render.githubusercontent.com/render/math?math=a_0=1">,
+
+<img src="https://render.githubusercontent.com/render/math?math=y[n] = -\sum_{m=1}^{N}a_my[n-m] %2B \sum_{m=0}^{M}b_mx[n-m].">
+
+* The <img src="https://render.githubusercontent.com/render/math?math=a_m"> are the **feedback coefficients** (similar to autoregressive coefficients in time series analysis)
+* The <img src="https://render.githubusercontent.com/render/math?math=b_m"> are the **feedforward coefficients** (similar to moving-average coefficients in time series analysis)
+* The **filter order** is <img src="https://render.githubusercontent.com/render/math?math=\max(M, N)">
+
+Note that we usually force <img src="https://render.githubusercontent.com/render/math?math=a_0=1">. If it's not the case we can simply normalize all the coefficients by <img src="https://render.githubusercontent.com/render/math?math=a_0"> without changing the filter behavior.
+
+### Examples
+
+* L-point moving average filter:
+
+<img src="https://render.githubusercontent.com/render/math?math=y[n] = \frac{1}{L}(x[n]%2Bx[n-1]%2B...%2Bx[n-L%2B1]).">
+
+  Here <img src="https://render.githubusercontent.com/render/math?math=a_0=1"> and <img src="https://render.githubusercontent.com/render/math?math=b_m=\frac{1}{L}"> if <img src="https://render.githubusercontent.com/render/math?math=m\in\{0, 1, ..., L-1\}">. The filter order is <img src="https://render.githubusercontent.com/render/math?math=L-1">.
+
+* Exponential smoothing with smoothing factor <img src="https://render.githubusercontent.com/render/math?math=0<\alpha<1">:
+
+<img src="https://render.githubusercontent.com/render/math?math=y[n] = \alpha y[n-1] %2B (1-\alpha)x[n].">
+
+  Here <img src="https://render.githubusercontent.com/render/math?math=a_0=1">, <img src="https://render.githubusercontent.com/render/math?math=a_1=-\alpha"> and <img src="https://render.githubusercontent.com/render/math?math=b_0=1-\alpha">. The filter order is 1.
+
+## Finite Impulse Response (FIR) filter
+
+If there are no feedback coefficients (except <img src="https://render.githubusercontent.com/render/math?math=a_0">), then the filter is an **FIR filter**,
+
+<img src="https://render.githubusercontent.com/render/math?math=y[n] = \sum_{m=0}^{M}b_mx[n-m].">
+
+FIR filters are very **stable**, but computationally more **expensive**.
+
+The impulse response of an FIR filter <img src="https://render.githubusercontent.com/render/math?math=\mathcal{H}"> is
+
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} h[n] %26= \mathcal{H}(\delta[n]) \\ %26= \sum_{m=0}^{M}b_m\delta[n-m] \\ %26= b_n. \end{aligned}">
+
+Therefore the impulse response of an FIR filter is simply the sequence of feedforward coefficients: <img src="https://render.githubusercontent.com/render/math?math=h[n]=[b_0, b_1,...,b_M]">.
+
+### Example
+
+The L-point moving average filter is an FIR filter. Its impulse response is <img src="https://render.githubusercontent.com/render/math?math=h[n]=[\frac{1}{L}, \frac{1}{L}, ..., \frac{1}{L}]">.
+
+## Infinite Impulse Response (IIR) filter
+
+If there is at least one feedback coefficient (other than <img src="https://render.githubusercontent.com/render/math?math=a_0">), then the filter is an **IIR filter**,
+
+<img src="https://render.githubusercontent.com/render/math?math=y[n] = -\sum_{m=1}^{N}a_my[n-m] %2B \sum_{m=0}^{M}b_mx[n-m].">
+
+IIR filters can be **unstable**, but are computationally much **cheaper**.
+
+The impulse response of an IIR cannot be explicitly written; it is infinite.
+
+### Example
+
+The exponential smoothing filter is an IIR filter,
+
+<img src="https://render.githubusercontent.com/render/math?math=y[n] = \alpha y[n-1] %2B (1-\alpha)x[n].">
+
+Trying to write the impulse response would look like this,
+
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} h[n] %26= \mathcal{H}(\delta[n]) \\ %26= \alpha\mathcal{H}(\delta[n-1]) %2B (1-\alpha)\delta[n] \\ %26= \alpha^2\mathcal{H}(\delta[n-2]) %2B \alpha(1-\alpha)\delta[n-1] %2B (1-\alpha)\delta[n] \\ %26= \alpha^3\mathcal{H}(\delta[n-3]) %2B \alpha^2(1-\alpha)\delta[n-2] %2B \alpha(1-\alpha)\delta[n-1] %2B (1-\alpha)\delta[n] \\ %26=\ ... \end{aligned}">
+
+As you can see this would never end.
+
+## Filter frequency response
+
+We saw above that a filter can be characterized with the impulse response; filtering is the same as convolving with the impulse response of the filter. The convolution theorem tells us that a convolution in the time domain is the same as multiplication in the frequency domain. Therefore, we can perform a filtering operation in the frequency domain instead, by multiplying the Fourier transform of the input signal with the Fourier transform of the impulse response,
+
+<img src="https://render.githubusercontent.com/render/math?math=y[n]=h[n]*x[n]\quad\xrightarrow[]{\quad\text{DTFT}\quad}\quad Y(\omega)=H(\omega)X(\omega)">
+
+<img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is the frequency response of the filter. It's another description of the filter, this time in the frequency domain. It describes how each frequency component is modified in gain and phase.
+
+Another way to look at it is as follows. Consider a **FIXED** <img src="https://render.githubusercontent.com/render/math?math=\omega\in\mathbb{R}">, and <img src="https://render.githubusercontent.com/render/math?math=x[n]=e^{i\omega n}">. That is, <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is a digital signal consisting of a single pure tone (single complex exponential, single component) at normalized frequency <img src="https://render.githubusercontent.com/render/math?math=\omega">. The output of the filter is then
+
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} y[n] %26= h[n]*x[n] \\ %26= \sum_{m=-\infty}^{\infty}h[m]x[n-m] \\ %26= \sum_{m=-\infty}^{\infty}h[m]e^{i\omega(n-m)} \\ %26= e^{i\omega n}\sum_{m=-\infty}^{\infty}h[m]e^{-i\omega m} \\ %26= e^{i\omega n}\ \text{DTFT}(h[n]) \\ %26= e^{i\omega n}H(\omega) \\ %26= x[n]H(\omega) \\ \end{aligned}">
+
+*I apologize to math purists; yes, we are multiplying <img src="https://render.githubusercontent.com/render/math?math=x[n]"> which lives in the time domain with <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> which lives in the frequency domain! The reason is that this time, <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> refers to the value taken by <img src="https://render.githubusercontent.com/render/math?math=H"> on <img src="https://render.githubusercontent.com/render/math?math=\omega">, and not the function <img src="https://render.githubusercontent.com/render/math?math=H"> itself. This is why I emphasized on <img src="https://render.githubusercontent.com/render/math?math=\omega"> being fixed. <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is still referring to the function <img src="https://render.githubusercontent.com/render/math?math=x"> though.*
+
+As we can see, the pure tone <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is simply multiplied by <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Since <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is complex, this means <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is transformed both in magnitude and in phase. In other words, the output is also a pure tone, only scaled and shifted. If we now instead consider an arbitrary input and think of it as an infinite sum of complex exponentials at different frequencies, and we remember filter are linear systems, then the output is simply the sum of all the components individually scaled and shifted according to the function <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Which is why a description like <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is so powerful. Beautiful, isn't it?
+
+* *But what if the filter is an IIR filter? For an FIR filter, <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> can be obtained by calculating the DTFT of the impulse response, which is simply the sequence of feedforward coefficients. But for an IIR, the impulse response is infinite!*
+
+We can still define the frequency response as follows. We saw above that if <img src="https://render.githubusercontent.com/render/math?math=x[n]=e^{i\omega n}">, then <img src="https://render.githubusercontent.com/render/math?math=y[n]=e^{i\omega n}H(\omega)">. Thus, starting from the difference equation,
+
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} %26%26 %26\sum_{m=0}^{N}a_my[n-m] = \sum_{m=0}^{M}b_mx[n-m] \\ %26%26\implies %26\sum_{m=0}^{N}a_me^{i\omega (n-m)}H(\omega) = \sum_{m=0}^{M}b_me^{i\omega (n-m)} \\ %26%26\implies %26H(\omega)e^{i\omega n}\sum_{m=0}^{N}a_me^{-i\omega m} = e^{i\omega n}\sum_{m=0}^{M}b_me^{-i\omega m} \\ %26%26\implies %26H(\omega)=\frac{\sum_{m=0}^{M}b_me^{-i\omega m}}{\sum_{m=0}^{N}a_me^{-i\omega m}} \\ \end{aligned}">
+
+Note that if there are no feedback coefficients except <img src="https://render.githubusercontent.com/render/math?math=a_0=1"> (case of an FIR filter), then only the numerator remains, which is again the Fourier transform of the sequence of feedforward coefficients!

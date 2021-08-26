@@ -653,7 +653,7 @@ As you can see this would never end.
 
 We saw above that a filter can be characterized with the impulse response; filtering is the same as convolving with the impulse response of the filter. The convolution theorem tells us that a convolution in the time domain is the same as multiplication in the frequency domain. Therefore, we can perform a filtering operation in the frequency domain instead, by multiplying the Fourier transform of the input signal with the Fourier transform of the impulse response,
 
-<img src="https://render.githubusercontent.com/render/math?math=y[n]=h[n]*x[n]\quad\xrightarrow[]{\quad\text{DTFT}\quad}\quad Y(\omega)=H(\omega)X(\omega)">
+<img src="https://render.githubusercontent.com/render/math?math=y[n]=h[n]*x[n]\quad\xrightarrow{\quad\text{DTFT}\quad}\quad Y(\omega)=H(\omega)X(\omega)">
 
 <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is the frequency response of the filter. It's another description of the filter, this time in the frequency domain. It describes how each frequency component is modified in gain and phase.
 

@@ -12,9 +12,9 @@ A digital signal is a discrete representation of a signal. If the signal is cont
 
 ![analog_discrete_digital](pics/analog_discrete_digital.png)
 
-Sampling and quantization is performed by a analog-to-digital converter (ADC). The digital signal can them be processed by DSP processors. Once the signal has been processed, it can be converted back to a continuous signal by a digital-to-analog converter (DAC), if it should be used in the real world. In the real world, ADCs and DACs are widely embedded in many user products.
+Sampling and quantization is performed by a analog-to-digital converter (ADC). The digital signal can then be processed by DSP processors. Once the signal has been processed, it can be converted back to a continuous signal by a digital-to-analog converter (DAC), if it should be used in the real world. In the real world, ADCs and DACs are widely embedded in many user products.
 
-E.g. the electrical signal produced by the microphone on a laptop is fed to a built-in ADC, and this signal can then be compressed by a DSP processor to be sent over the Internet. Conversely, a DAC converts the digital sound signals to continuous electrical signals so that they can be reproduced by the laptop speakers.
+E.g. the electrical signal produced by the microphone on a laptop is fed to a built-in ADC, and this signal can then be compressed by a DSP processor to be sent over the Internet. Conversely, a DAC converts the digital sound signals to continuous electrical signals so they can be reproduced by the laptop speakers.
 
 A typical signal processing chain is depicted below.
 
@@ -70,7 +70,7 @@ The **discrete convolution** is the adaptation to discrete signals and is define
 
 <img src="https://render.githubusercontent.com/render/math?math=\forall m \in \mathbb{Z}, \quad (f * g)[m] = \sum_{n=-\infty}^{%2B\infty}f[n]g[m-n].">
 
-For discrete signals with finite lengths, signal values outside the definition range are assumed to be 0, and the sum becomes finite as most of the terms equal zero. E.g. if <img src="https://render.githubusercontent.com/render/math?math=x[n]"> with length <img src="https://render.githubusercontent.com/render/math?math=N_x"> is defined for <img src="https://render.githubusercontent.com/render/math?math=n \in \{0, 1, ..., N_x-1\}">, and <img src="https://render.githubusercontent.com/render/math?math=y[n]"> with length <img src="https://render.githubusercontent.com/render/math?math=N_y"> is defined for <img src="https://render.githubusercontent.com/render/math?math=n \in \{0, 1, ..., N_y-1\}">, then <img src="https://render.githubusercontent.com/render/math?math=(x * y)[m]"> as length <img src="https://render.githubusercontent.com/render/math?math=N_x%2BN_y-1"> and is defined for  <img src="https://render.githubusercontent.com/render/math?math=m \in \{0, 1, ..., N_x%2BN_y-1\}">
+For discrete signals with finite lengths, signal values outside the definition range are assumed to be 0, and the sum becomes finite as most of the terms equal zero. E.g. if <img src="https://render.githubusercontent.com/render/math?math=x[n]"> with length <img src="https://render.githubusercontent.com/render/math?math=N_x"> is defined for <img src="https://render.githubusercontent.com/render/math?math=n \in \{0, 1, ..., N_x-1\}">, and <img src="https://render.githubusercontent.com/render/math?math=y[n]"> with length <img src="https://render.githubusercontent.com/render/math?math=N_y"> is defined for <img src="https://render.githubusercontent.com/render/math?math=n \in \{0, 1, ..., N_y-1\}">, then <img src="https://render.githubusercontent.com/render/math?math=(x * y)[m]"> has length <img src="https://render.githubusercontent.com/render/math?math=N_x%2BN_y-1"> and is defined for  <img src="https://render.githubusercontent.com/render/math?math=m \in \{0, 1, ..., N_x%2BN_y-1\}">.
 
 I am introducing this operation here as it is fundamental tool in DSP and it will be used later on.
 
@@ -197,7 +197,7 @@ Let <img src="https://render.githubusercontent.com/render/math?math=x[n]"> a dis
 
 <img src="https://render.githubusercontent.com/render/math?math=X[k] = \sum_{n=0}^{N-1}x[n]e^{-i 2 \pi \frac{kn}{N}}, \quad \forall k \in \{0, 1, ..., N-1\}.">
 
-Again, this resembles a projection on the basis of complex exponentials, except it was adapted for a discrete and finite-length signal by replace the integration sign with a discrete sum over the signal values.
+Again, this resembles a projection on the basis of complex exponentials, except it was adapted for a discrete and finite-length signal by replacing the integration sign with a discrete sum over the signal values.
 
 The inverse DFT is
 
@@ -245,6 +245,7 @@ A few practical notes here already:
     * The frequency values corresponding to the raw FFT output are ordered as follows:
         * if N is even:
         <img src="https://render.githubusercontent.com/render/math?math=0,\ \frac{f_s}{N},\ ...,\ \frac{N}{2}\frac{f_s}{N},\ (-\frac{N}{2}%2B1)\frac{f_s}{N},\ ...,\ -\frac{f_s}{N}">
+
         * if N is odd:
         <img src="https://render.githubusercontent.com/render/math?math=0,\ \frac{f_s}{N},\ ...,\ \frac{N-1}{2}\frac{f_s}{N},\ -\frac{N-1}{2}\frac{f_s}{N},\ ...,\ -\frac{f_s}{N}">
       Yes, we first have the positive frequencies in increasing order up to <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}">, and then the negative frequencies increasing from <img src="https://render.githubusercontent.com/render/math?math=-\frac{f_s}{2}"> to 0. These frequency values are commonly called **frequency bins**, as if the energy was falling in *bins* centered at those frequencies. 
@@ -267,7 +268,7 @@ FAQ:
 
 The convolution theorem states that convolution in the time-domain is the same as multiplication in the frequency domain. Conversely, multiplication in the time-domain is the same as convolution in the frequency domain.
 
-In the continuous domain, let <img src="https://render.githubusercontent.com/render/math?math=x(t)"> and <img src="https://render.githubusercontent.com/render/math?math=y(t)"> two signals in <img src="https://render.githubusercontent.com/render/math?math=L^1(\mathbb{R})">. With <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}"> the Fourier transform operator for continuous functions, and <img src="https://render.githubusercontent.com/render/math?math=*"> the continuous convolution operator, we have
+In the continuous case, let <img src="https://render.githubusercontent.com/render/math?math=x(t)"> and <img src="https://render.githubusercontent.com/render/math?math=y(t)"> two signals in <img src="https://render.githubusercontent.com/render/math?math=L^1(\mathbb{R})">. With <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}"> the Fourier transform operator for continuous functions, and <img src="https://render.githubusercontent.com/render/math?math=*"> the continuous convolution operator, we have
 
 <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(x*y) = \mathcal{F}(x)\mathcal{F}(y),">
 <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(xy) = \frac{1}{2\pi}\mathcal{F}(x)*\mathcal{F}(y).">
@@ -342,7 +343,7 @@ plt.show()  # you should observe the curves overlap in both plots
 
 Briefly put, when sampling at a frequency <img src="https://render.githubusercontent.com/render/math?math=f_s">, the sampling theorem says that the highest representable frequency is <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}">. In other words, the sampling frequency should be at least twice as high as the highest frequency component of the sampled signal.
 
-An simple example to illustrate this is the sampling of a sinusoid. Consider a sinusoid with frequency <img src="https://render.githubusercontent.com/render/math?math=f_0=100\ \text{Hz}"> sampled at a different frequencies <img src="https://render.githubusercontent.com/render/math?math=f_s">.
+A simple example to illustrate this is the sampling of a sinusoid. Consider a sinusoid with frequency <img src="https://render.githubusercontent.com/render/math?math=f_0=100\ \text{Hz}"> sampled at a different frequencies <img src="https://render.githubusercontent.com/render/math?math=f_s">.
 
 
 ```python
@@ -374,7 +375,7 @@ plt.show()
     
 
 
-Can you see where the problem arises once we set <img src="https://render.githubusercontent.com/render/math?math=f_s"> below <img src="https://render.githubusercontent.com/render/math?math=f_0=100\ \text{Hz}">? It will not be possible to reconstruct the continuous signal anymore from the digital signal. To see why, imagine <img src="https://render.githubusercontent.com/render/math?math=f_s=180\ \text{Hz}"> and we have two sinusoids, one at <img src="https://render.githubusercontent.com/render/math?math=f_0=100\ \text{Hz}"> and <img src="https://render.githubusercontent.com/render/math?math=f_1=80\ \text{Hz}">.
+Can you see where the problem arises once we set <img src="https://render.githubusercontent.com/render/math?math=f_s"> below <img src="https://render.githubusercontent.com/render/math?math=2f_0=200\ \text{Hz}">? It will not be possible to reconstruct the continuous signal anymore from the digital signal. To see why, imagine <img src="https://render.githubusercontent.com/render/math?math=f_s=180\ \text{Hz}"> and we have two sinusoids, one at <img src="https://render.githubusercontent.com/render/math?math=f_0=100\ \text{Hz}"> and <img src="https://render.githubusercontent.com/render/math?math=f_1=80\ \text{Hz}">.
 
 
 ```python
@@ -407,7 +408,7 @@ plt.show()
     
 
 
-As you can see, both signals produce the exact same samples! It's therefore impossible to know from the samples if the signal is a sinusoid at 40 Hz or a sinusoid at 100 Hz.
+As you can see, both signals produce the exact same samples! It's therefore impossible to know from the samples if the signal is a sinusoid at 80 Hz or a sinusoid at 100 Hz.
 
 This can be explained in the general case of any signal using the convolution theorem and the Dirac comb function. Remember we saw above that sampling is the same as multiplying the signal with the Dirac comb,
 
@@ -423,11 +424,11 @@ Now it can be shown that the Fourier transform of a Dirac comb is also a Dirac c
 
 Therefore, sampling in the time-domain is the same as convolving with a Dirac comb in the frequency domain. And convolving with a Dirac comb is the same as replicating the signal infinitely, with replicas evenly spaced by <img src="https://render.githubusercontent.com/render/math?math=\omega_s">.
 
-The image below describes this. In the image, <img src="https://render.githubusercontent.com/render/math?math=X_a(\omega)"> is an example spectrum of the original continuous signal <img src="https://render.githubusercontent.com/render/math?math=x(t)">, while <img src="https://render.githubusercontent.com/render/math?math=X_\delta(\omega)"> is the spectrum of the sampled signal <img src="https://render.githubusercontent.com/render/math?math=\text{III}_{T_s}x(t)">. Since <img src="https://render.githubusercontent.com/render/math?math=x"> is real-valued, <img src="https://render.githubusercontent.com/render/math?math=X_a(\omega)"> is symmetric around <img src="https://render.githubusercontent.com/render/math?math=\omega=0">. You can see the spectrum is replicated infinitely along the frequency axis, with copies evenly spaced by <img src="https://render.githubusercontent.com/render/math?math=\omega_s">. The highest frequency component of the original signal is <img src="https://render.githubusercontent.com/render/math?math=\omega_\max">.
+The image below describes this. In the image, <img src="https://render.githubusercontent.com/render/math?math=X_a(\omega)"> is an example spectrum of the original continuous signal <img src="https://render.githubusercontent.com/render/math?math=x(t)">, while <img src="https://render.githubusercontent.com/render/math?math=X_\delta(\omega)"> is the spectrum of the sampled signal <img src="https://render.githubusercontent.com/render/math?math=(\text{III}_{T_s}x)(t)">. Since <img src="https://render.githubusercontent.com/render/math?math=x"> is real-valued, <img src="https://render.githubusercontent.com/render/math?math=X_a(\omega)"> is symmetric around <img src="https://render.githubusercontent.com/render/math?math=\omega=0">. You can see the spectrum is replicated infinitely along the frequency axis, with copies evenly spaced by <img src="https://render.githubusercontent.com/render/math?math=\omega_s">. The highest frequency component of the original signal is <img src="https://render.githubusercontent.com/render/math?math=\omega_\max">.
 
 ![nyquist](pics/nyquist.png)
 
-We can see now that if we have <img src="https://render.githubusercontent.com/render/math?math=\omega_\max>\frac{\omega_s}{2}">, the replicas would **overlap**. The frequency components above <img src="https://render.githubusercontent.com/render/math?math=\frac{\omega_s}{2}"> would mirror back and get confused with lower frequencies. This is called **aliasing**. The highest representable frequency, i.e. <img src="https://render.githubusercontent.com/render/math?math=\frac{w_s}{2}"> in rad/s or <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}"> in Hz, is called the **Nyquist frequency**. The signal frequency content should be below the Nyquist frequency, otherwise we are undersampling the signal.
+We can see now that if we have <img src="https://render.githubusercontent.com/render/math?math=\omega_\max>\frac{\omega_s}{2}">, the replicas would **overlap**. The frequency components above <img src="https://render.githubusercontent.com/render/math?math=\frac{\omega_s}{2}"> would mirror back and get confused with lower frequencies. This is called **aliasing**. The highest representable frequency, i.e. <img src="https://render.githubusercontent.com/render/math?math=\frac{\omega_s}{2}"> in rad/s or <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}"> in Hz, is called the **Nyquist frequency**. The signal frequency content should be below the Nyquist frequency, otherwise we are undersampling the signal.
 
 ![aliasing](pics/aliasing.png)
 
@@ -439,7 +440,7 @@ This is a bit silly, as on top of a 44100-point FFT being expensive (the FFT com
 
 What is more common to do is to frame the signal in the time domain into adjacent windows and perform the FFT of each window. This is called a Short-time Fourier transform (STFT). This means we can have a representation of the signal that is both a function of time (frame number) and frequency!
 
-The STFT is implemented in `scipy` under `scipy.signal.stft`. In the example below I generate a sinusoid with a frequency modulated by another sinusoid. The FFT of the entire signal shows high values across the entire range of swept frequencies, while the STFT allows to observe how the frequency changes over time.
+The STFT is implemented in `scipy` under `scipy.signal.stft`. In the example below I generate a sinusoid whose frequency is modulated by another sinusoid. The FFT of the entire signal shows high values across the entire range of swept frequencies, while the STFT allows to observe how the frequency changes over time.
 
 
 ```python
@@ -524,7 +525,7 @@ plt.show()
 * *But the magnitude (y-axis) does not match!*
     * There are different ways of normalizing the FFT and the STFT which are not always documented. Here the STFT implementation of `scipy` evidently applies a normalization whereas `np.fft.fft` does not. There is also windowing coming into play here which I didn't cover. Ultimately this does not matter so much as the most important is the location of the peaks and their relative difference.
 * *How do I chose the length of the frame/window (`nperseg` option)?*
-    * This is up to you. A shorter frame size will give you a better time resolution, but a worse frequency resolution. Conversely a longer frame gives a worse time resolution, but a better frequency resolution. However the FFT is the fastest for signal lengths equal to a power of 2. So common frame sizes for audio analysis are 256, 512, 1024, 2048  and 4096, depending on the sampling rate. For other applications with different sampling rates, frame sizes must be adapted consequently.
+    * This is up to you. A shorter frame size will give you a better time resolution, but a worse frequency resolution. Conversely a longer frame gives a worse time resolution, but a better frequency resolution. However the FFT is the fastest for signal lengths equal to a power of 2. So common frame sizes for audio analysis are e.g. 256, 512, 1024, 2048 or 4096, depending on the sampling rate. For other applications with different sampling rates, frame sizes must be adapted consequently.
 
 # Filters
 

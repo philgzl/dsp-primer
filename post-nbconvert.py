@@ -1,6 +1,5 @@
-import re
-
 math_mode = False
+code_mode = False
 indexes = []
 
 with open('README.md') as f:
@@ -9,7 +8,12 @@ with open('README.md') as f:
 new_content = ''
 i = 0
 while i < len(content):
-    if content[i] == '$':
+    if i+3 <= len(content) and content[i:i+3] == '```':
+        if not code_mode:
+            code_mode = True
+        else:
+            code_mode = False
+    if content[i] == '$' and not code_mode:
         if not math_mode:
             math_mode = True
             if i+1 < len(content) and content[i+1] == '$':

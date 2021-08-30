@@ -5,7 +5,7 @@
 
 This notebook introduces fundamental digital signal processing (DSP) concepts used in the 02471 Machine Learning for Signal Processing course at DTU. It is targeted to students who are not familiar with signal processing and need a resource to catch up. Note that this is however by no means a substitute for the course prerequisites; signal processing is **difficult** and this notebook is far from being exhaustive. Students are invited to check other well established resources when in doubt, or come forward with questions.
 
-If you are reading this from the README.md, note there is also an IPython notebook where you can play with the code snippets and run them. Math equations are also better supported there.
+If you are reading this from the README.md, I recommend switching the [IPython notebook](https://nbviewer.jupyter.org/github/philgzl/dsp-primer/blob/master/notebook.ipynb) instead, where the math formulas are better rendered. You can also download the notebook to modify and run the code snippets.
 
 The following assumes you are familiar with real analysis mathematics.
 

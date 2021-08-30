@@ -1,3 +1,6 @@
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Preface" data-toc-modified-id="Preface-1">Preface</a></span></li><li><span><a href="#Introduction" data-toc-modified-id="Introduction-2">Introduction</a></span></li><li><span><a href="#Sampling" data-toc-modified-id="Sampling-3">Sampling</a></span></li><li><span><a href="#Convolution" data-toc-modified-id="Convolution-4">Convolution</a></span></li><li><span><a href="#Periodic-signals" data-toc-modified-id="Periodic-signals-5">Periodic signals</a></span></li><li><span><a href="#Fourier-series" data-toc-modified-id="Fourier-series-6">Fourier series</a></span></li><li><span><a href="#Fourier-Transform" data-toc-modified-id="Fourier-Transform-7">Fourier Transform</a></span><ul class="toc-item"><li><span><a href="#Continuous-Fourier-Transform" data-toc-modified-id="Continuous-Fourier-Transform-7.1">Continuous Fourier Transform</a></span></li><li><span><a href="#Discrete-Time-Fourier-Transform-(DTFT)" data-toc-modified-id="Discrete-Time-Fourier-Transform-(DTFT)-7.2">Discrete-Time Fourier Transform (DTFT)</a></span></li><li><span><a href="#Discrete-Fourier-Transform-(DFT)" data-toc-modified-id="Discrete-Fourier-Transform-(DFT)-7.3">Discrete Fourier Transform (DFT)</a></span></li></ul></li><li><span><a href="#Convolution-theorem" data-toc-modified-id="Convolution-theorem-8">Convolution theorem</a></span></li><li><span><a href="#Nyquist-Shannon-sampling-theorem" data-toc-modified-id="Nyquist-Shannon-sampling-theorem-9">Nyquist-Shannon sampling theorem</a></span></li><li><span><a href="#Short-time-Fourier-transform" data-toc-modified-id="Short-time-Fourier-transform-10">Short-time Fourier transform</a></span></li><li><span><a href="#Filters" data-toc-modified-id="Filters-11">Filters</a></span><ul class="toc-item"><li><span><a href="#Impulse-response" data-toc-modified-id="Impulse-response-11.1">Impulse response</a></span></li><li><span><a href="#Difference-equation" data-toc-modified-id="Difference-equation-11.2">Difference equation</a></span></li><li><span><a href="#Finite-Impulse-Response-(FIR)-filter" data-toc-modified-id="Finite-Impulse-Response-(FIR)-filter-11.3">Finite Impulse Response (FIR) filter</a></span></li><li><span><a href="#Infinite-Impulse-Response-(IIR)-filter" data-toc-modified-id="Infinite-Impulse-Response-(IIR)-filter-11.4">Infinite Impulse Response (IIR) filter</a></span></li><li><span><a href="#Filter-frequency-response" data-toc-modified-id="Filter-frequency-response-11.5">Filter frequency response</a></span></li></ul></li><li><span><a href="#Postface" data-toc-modified-id="Postface-12">Postface</a></span></li><li><span><a href="#References" data-toc-modified-id="References-13">References</a></span></li></ul></div>
+
 # Preface
 
 This notebook introduces fundamental digital signal processing (DSP) concepts used in the 02471 Machine Learning for Signal Processing course at DTU. It is targeted to students who are not familiar with signal processing and need a resource to catch up. Note that this is however by no means a substitute for the course prerequisites; signal processing is **difficult** and this notebook is far from being exhaustive. Students are invited to check other well established resources when in doubt, or come forward with questions.
@@ -117,7 +120,7 @@ plt.show()
 
 
     
-![png](README_files/README_4_0.png)
+![png](README_files/README_5_0.png)
     
 
 
@@ -216,7 +219,7 @@ plt.show()  # you should see the more sines we add, the closer the total sum res
 
 
     
-![png](README_files/README_7_0.png)
+![png](README_files/README_8_0.png)
     
 
 
@@ -278,8 +281,7 @@ The discrete Fourier transform plays a huge role in DSP, and while the math theo
 
 The DFT is implemented in `numpy` under `numpy.fft.fft`. FFT stands for Fast Fourier Transform and is an optimized algorithm to calculate the DFT. The terms FFT and DFT are often used interchangeably.
 
-### Example
-Let's create a simple signal consisting of a sum of 2 sinusoids with different frequencies. You will see how the DFT is able to resolve the 2 components.
+**Example**: Let's create a simple signal consisting of a sum of 2 sinusoids with different frequencies. You will see how the DFT is able to resolve the 2 components.
 
 
 ```python
@@ -308,7 +310,7 @@ plt.show()  # you should see two clean spikes at locations corresponding to f1 a
 
 
     
-![png](README_files/README_9_0.png)
+![png](README_files/README_11_0.png)
     
 
 
@@ -341,9 +343,7 @@ FAQ:
       
       This will consistently give a correct frequency axis regardless of <img src="https://render.githubusercontent.com/render/math?math=N"> being even or odd. You can also use the `numpy.fft.fftfreq` or `np.fft.rfftfreq` functions.
 
-### Examples
-
-Below I plot a series of common Fourier transforms.
+**More examples**: Below I plot a series of common Fourier transforms.
 
 
 ```python
@@ -403,7 +403,7 @@ plt.show()
 
 
     
-![png](README_files/README_11_0.png)
+![png](README_files/README_13_0.png)
     
 
 
@@ -487,7 +487,7 @@ plt.show()  # you should observe the curves overlap in both plots
 
 
     
-![png](README_files/README_14_0.png)
+![png](README_files/README_16_0.png)
     
 
 
@@ -523,7 +523,7 @@ plt.show()
 
 
     
-![png](README_files/README_16_0.png)
+![png](README_files/README_18_0.png)
     
 
 
@@ -556,7 +556,7 @@ plt.show()
 
 
     
-![png](README_files/README_18_0.png)
+![png](README_files/README_20_0.png)
     
 
 
@@ -634,7 +634,7 @@ plt.show()
 
 
     
-![png](README_files/README_21_0.png)
+![png](README_files/README_23_0.png)
     
 
 
@@ -670,7 +670,7 @@ plt.show()
 
 
     
-![png](README_files/README_23_0.png)
+![png](README_files/README_25_0.png)
     
 
 
@@ -724,7 +724,7 @@ or, if we want the output <img src="https://render.githubusercontent.com/render/
 
 Note that we usually force <img src="https://render.githubusercontent.com/render/math?math=a_0=1">. If it's not the case we can simply normalize all the coefficients by <img src="https://render.githubusercontent.com/render/math?math=a_0"> without changing the filter behavior.
 
-### Examples
+**Examples:**
 
 * L-point moving average filter:
 
@@ -752,9 +752,7 @@ The impulse response of an FIR filter <img src="https://render.githubusercontent
 
 Therefore the impulse response of an FIR filter is simply the sequence of feedforward coefficients: <img src="https://render.githubusercontent.com/render/math?math=h[n]=[b_0, b_1,...,b_M]">.
 
-### Example
-
-The L-point moving average filter is an FIR filter. Its impulse response is <img src="https://render.githubusercontent.com/render/math?math=h[n]=[\frac{1}{L}, \frac{1}{L}, ..., \frac{1}{L}]">.
+**Example**: The L-point moving average filter is an FIR filter. Its impulse response is <img src="https://render.githubusercontent.com/render/math?math=h[n]=[\frac{1}{L}, \frac{1}{L}, ..., \frac{1}{L}]">.
 
 ## Infinite Impulse Response (IIR) filter
 
@@ -766,9 +764,7 @@ IIR filters can be **unstable**, but are computationally much **cheaper**.
 
 The impulse response of an IIR cannot be explicitly written; it is infinite.
 
-### Example
-
-The exponential smoothing filter is an IIR filter,
+**Example**: The exponential smoothing filter is an IIR filter,
 
 <img src="https://render.githubusercontent.com/render/math?math=y[n] = \alpha y[n-1] %2B (1-\alpha)x[n].">
 
@@ -778,7 +774,7 @@ Trying to write the impulse response would look like this,
 
 As you can see this would never end. Also if <img src="https://render.githubusercontent.com/render/math?math=\alpha>1">, the output would explode and the filter would be unstable.
 
-### Example
+**Example**:
 
 Digital filtering is implemented under `scipy.signal.lfilter`. The function takes as arguments the sequence of feedforward coefficients, the sequence of feedback coefficients and the input signal. Note the first feedforward coefficient, i.e. <img src="https://render.githubusercontent.com/render/math?math=a_0">, must be 1.
 
@@ -815,7 +811,7 @@ plt.show()
 
 
     
-![png](README_files/README_34_0.png)
+![png](README_files/README_36_0.png)
     
 
 
@@ -843,7 +839,7 @@ We can still define the frequency response as follows. We saw above that if <img
 
 Note that if there are no feedback coefficients except <img src="https://render.githubusercontent.com/render/math?math=a_0=1"> (case of an FIR filter), then only the numerator remains, and we correctly obtain the DTFT of the sequence of feedforward coefficients (assuming <img src="https://render.githubusercontent.com/render/math?math=b_m=0"> for <img src="https://render.githubusercontent.com/render/math?math=m \notin \{0,1,...,M\}"> so the sum extends to infinity)!
 
-## Example
+**Example**:
 
 A filter frequency response can be calculated using `scipy.signal.freqz`. The function takes as arguments the sequence of feedforward coefficients and the sequence of feedback coefficients. It can also take the number of evenly-spaced frequency points `worN` at which to calculate the frequency response. The function outputs a frequency vector and the complex frequency response. Note the frequency vector ranges from 0 to <img src="https://render.githubusercontent.com/render/math?math=\pi">, so you then have to scale it so that it ranges from <img src="https://render.githubusercontent.com/render/math?math=0"> to <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}">, depending on the sampling frequency <img src="https://render.githubusercontent.com/render/math?math=f_s"> you are working at. Or you can provide the `fs` argument to `scipy.signal.freqz` and the frequency vector output will be correctly scaled.
 
@@ -875,7 +871,7 @@ plt.show()
 
 
     
-![png](README_files/README_37_0.png)
+![png](README_files/README_39_0.png)
     
 
 

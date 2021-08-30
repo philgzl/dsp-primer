@@ -2,6 +2,8 @@
 
 This notebook introduces fundamental digital signal processing (DSP) concepts used in the 02471 Machine Learning for Signal Processing course at DTU. It is targeted to students who are not familiar with signal processing and need a resource to catch up. Note that this is however by no means a substitute for the course prerequisites; signal processing is **difficult** and this notebook is far from being exhaustive. Students are invited to check other well established resources when in doubt, or come forward with questions.
 
+If you are reading this from the README.md, note there is also an IPython notebook where you can play with the code snippets and run them. Math equations are also better supported there.
+
 The following assumes you are familiar with real analysis mathematics.
 
 # Introduction
@@ -78,6 +80,47 @@ The best way the understand this operation is to look at a visual representation
 
 ![convolution](pics/convolution.gif)
 
+**Example**: The identity element for the convolution is the Dirac delta impulse,
+
+<img src="https://render.githubusercontent.com/render/math?math=x[n] * \delta[n] = x[n].">
+
+You can try to prove it as an exercise.
+
+**Example**: The L-point moving average of a time series can be expressed as a convolution. Consider <img src="https://render.githubusercontent.com/render/math?math=x[n]"> a time series and <img src="https://render.githubusercontent.com/render/math?math=y[n]"> its L-point moving average,
+
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} y[n] %26= \frac{1}{L}(x[n] %2B x[n-1] %2B\ ...\ %2B x[n-L%2B1])\\ %26= \frac{1}{L}\sum_{k=0}^{L-1}x[n-k]\\ %26= \sum_{k=0}^{L-1}h[k]x[n-k] \quad \quad \text{where}\ h[k]=\frac{1}{L}\\ %26= h[n]*x[n], \end{aligned}">
+
+where <img src="https://render.githubusercontent.com/render/math?math=h[n]=\underbrace{[\frac{1}{L}, \frac{1}{L},\ ...\ , \frac{1}{L}]}_\text{L terms}">.
+
+Below I use `numpy.convolve` to convolve an arbitrary signal with <img src="https://render.githubusercontent.com/render/math?math=h[n]=[\frac{1}{L}, \frac{1}{L},\ ...\ , \frac{1}{L}]">.
+
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams['axes.grid'] = True
+
+n = 11  # number of points
+x = np.linspace(0, 1, n)**2 ; x = np.minimum(x, x[::-1])  # arbitrary signal
+L = 5  # number of points to average
+h = np.ones(L)/L
+y = np.convolve(h, x)
+
+fig, ax = plt.subplots(figsize=(10, 3))
+ax.plot(x, 'o-', label='$x$')
+ax.plot(h, 'o-', label='$h$')
+ax.plot(y, 'o-', label='$y=h*x$')
+ax.legend()
+plt.show()
+```
+
+
+    
+![png](README_files/README_4_0.png)
+    
+
+
 # Periodic signals
 
 Let <img src="https://render.githubusercontent.com/render/math?math=x(t)"> a periodic signal. Therefore, there exists a period <img src="https://render.githubusercontent.com/render/math?math=T\in\mathbb{R}"> such that
@@ -88,7 +131,7 @@ A periodic signal can also be characterized by its frequency <img src="https://r
 
 <img src="https://render.githubusercontent.com/render/math?math=f = \frac{1}{T}.">
 
-Example of a periodic signals:
+Examples of periodic signals:
 * Sinusoids: <img src="https://render.githubusercontent.com/render/math?math=x(t) = \sin(2 \pi f t), \forall t \in \mathbb{R}">
 * Complex exponentials: <img src="https://render.githubusercontent.com/render/math?math=x(t) = e^{i 2 \pi f t}, \forall t \in \mathbb{R}">
 * Temperature across seasons (roughly, and disregarding rising trend due to global warming)
@@ -105,7 +148,7 @@ The <img src="https://render.githubusercontent.com/render/math?math=c_n"> are ca
 
 If <img src="https://render.githubusercontent.com/render/math?math=x(t)"> is real-valued, then for all <img src="https://render.githubusercontent.com/render/math?math=n \in \mathbb{Z}">, <img src="https://render.githubusercontent.com/render/math?math=c_n"> and <img src="https://render.githubusercontent.com/render/math?math=c_{-n}"> are complex conjugates and the sum can be rearranged as a sum of sines and cosines,
 
-<img src="https://render.githubusercontent.com/render/math?math=x(t) = \sum_{n=0}^{%2B\infty} a_n \cos (2 \pi \frac{n t}{T}) %2B \sum_{n=0}^{%2B\infty} b_n \sin (2 \pi \frac{n t}{T}) , \quad \forall t \in \mathbb{R}.">
+<img src="https://render.githubusercontent.com/render/math?math=x(t) = \frac{a_0}{2} %2B \sum_{n=1}^{%2B\infty} a_n \cos (2 \pi \frac{n t}{T}) %2B \sum_{n=1}^{%2B\infty} b_n \sin (2 \pi \frac{n t}{T}) , \quad \forall t \in \mathbb{R}.">
 
 This property is very powerful as it means that we can think of any periodic signal as a sum of well-known functions, the complex exponentials. Moreover, as you may know from your real analysis course, the complex exponentials form a **basis** of functions in the <img src="https://render.githubusercontent.com/render/math?math=L^2"> sense. This means that the <img src="https://render.githubusercontent.com/render/math?math=c_n"> can be derived by projecting <img src="https://render.githubusercontent.com/render/math?math=x(t)"> onto the individual basis functions,
 
@@ -130,19 +173,28 @@ Here the Fourier coefficients can be directly identified. We have
 
 <img src="https://render.githubusercontent.com/render/math?math=x(t) = (\frac{t}{\pi} %2B 1)\ \text{mod}\ 2 - 1, \quad \forall t \in \mathbb{R}.">
 
-It can be shown that <img src="https://render.githubusercontent.com/render/math?math=x(t)"> can be rewritten as
+It can be shown that <img src="https://render.githubusercontent.com/render/math?math=x(t)"> can be rewritten as an infinite sum of sines,
 
-<img src="https://render.githubusercontent.com/render/math?math=x(t) = -\frac{2}{\pi}\sum_{n=1}^{%2B\infty}(-1)^k\sin\frac{kt}{k}.">
+<img src="https://render.githubusercontent.com/render/math?math=x(t) = -\frac{2}{\pi}\sum_{k=1}^{%2B\infty}\frac{(-1)^k}{k}\sin kt.">
+
+The Fourier coefficients here are
+
+* <img src="https://render.githubusercontent.com/render/math?math=c_k = \frac{i}{\pi}\frac{(-1)^k}{k}"> if <img src="https://render.githubusercontent.com/render/math?math=k>0">,
+
+* <img src="https://render.githubusercontent.com/render/math?math=c_k = -\frac{i}{\pi}\frac{(-1)^k}{k}"> if <img src="https://render.githubusercontent.com/render/math?math=k<0">,'
+
+* <img src="https://render.githubusercontent.com/render/math?math=c_0 = 0"> if <img src="https://render.githubusercontent.com/render/math?math=k=0">.
+
+Or using <img src="https://render.githubusercontent.com/render/math?math=a_n"> and <img src="https://render.githubusercontent.com/render/math?math=b_n"> coefficients,
+
+* <img src="https://render.githubusercontent.com/render/math?math=b_k = -\frac{2}{\pi}\frac{(-1)^k}{k}"> for all <img src="https://render.githubusercontent.com/render/math?math=k>0">,
+
+* <img src="https://render.githubusercontent.com/render/math?math=a_k = 0"> for all <img src="https://render.githubusercontent.com/render/math?math=k\geq 0">.
 
 In the snippet below I verify this by adding a finite amount of these sines. We can see the more sines are added, the more the total sum resembles a sawtooth wave.
 
 
 ```python
-import matplotlib.pyplot as plt
-import numpy as np
-
-plt.rcParams['axes.grid'] = True
-
 n = 500  # number of points
 n_T = 3  # number of periods
 
@@ -155,8 +207,7 @@ ax.plot(t, x, label='sawtooth')
 for n_components in [1, 2, 5, 10]:
     x = 0
     for k in range(1, n_components+1):
-        x += (-1)**k*np.sin(k*t)/k
-    x *= -2/np.pi
+        x += -2/np.pi*(-1)**k/k*np.sin(k*t)
     ax.plot(t, x, label=f'{k} components')
 
 ax.legend()
@@ -165,7 +216,7 @@ plt.show()  # you should see the more sines we add, the closer the total sum res
 
 
     
-![png](README_files/README_6_0.png)
+![png](README_files/README_7_0.png)
     
 
 
@@ -193,9 +244,9 @@ A few notes/properties:
     * Sometimes it is noted like this to emphasize on the dependent variable, even though that's abusive for math purists: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}[x(t)] = X(\omega)">
 * The inverse Fourier transform of X is <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}^{-1}(X)(t) = \frac{1}{2\pi}\int_{-\infty}^{%2B\infty}X(\omega)e^{i\omega t}d\omega, \quad \forall t \in \mathbb{R},"> which is the same as the forward Fourier transform except there is a normalization factor and a plus sign in the exponential.
 
-This was all in the continuous domain so far. Now, there is as rigorous formalism that I will skip that allows to adapt the continuous Fourier transform to digital signals while keeping *most* of its properties. We first define the  discrete-time Fourier transform (DTFT), and then the discrete Fourier transform (DFT). I will go over this quickly without diving into the intricacies about how the validity of the properties are kept. But the properties are overall maintained and the underlying mechanism of all the Fourier transform variants is the same: we decompose signals into frequencies.
+This was all in the continuous domain so far. Now, there is as rigorous formalism that I will skip that allows to adapt the continuous Fourier transform to digital signals while keeping *most* of its properties. We first define the discrete-time Fourier transform (DTFT), and then the discrete Fourier transform (DFT). I will go over this quickly without diving into the intricacies about how the validity of the properties is kept. But the properties are overall maintained and the underlying mechanism of all the Fourier transform variants is the same: we decompose signals into frequencies.
 
-### Discrete-Time Fourier Transform (DTFT)
+## Discrete-Time Fourier Transform (DTFT)
 
 Let <img src="https://render.githubusercontent.com/render/math?math=x[n]"> a discrete signal with infinite length (not necessarily periodic). The discrete-time Fourier transform (DTFT) of <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is defined as
 
@@ -209,7 +260,7 @@ The DTFT is <img src="https://render.githubusercontent.com/render/math?math=2\pi
 
 This is a first adaptation for discrete signals, except the summation is infinite and it still takes values in an infinite and continuous frequency space. The next step is to *truncate* and *sample* the DTFT at equidistant frequency points, which yields the discrete Fourier transform (DFT).
 
-### Discrete Fourier Transform (DFT)
+## Discrete Fourier Transform (DFT)
 
 Let <img src="https://render.githubusercontent.com/render/math?math=x[n]"> a discrete signal of finite length <img src="https://render.githubusercontent.com/render/math?math=N">. That is, we have a sequence of <img src="https://render.githubusercontent.com/render/math?math=N"> values <img src="https://render.githubusercontent.com/render/math?math=x[0], x[1], ..., x[N-1]">. The discrete Fourier transform (DFT) of <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is defined as
 
@@ -219,7 +270,7 @@ The inverse DFT is
 
 <img src="https://render.githubusercontent.com/render/math?math=x[n] = \frac{1}{N}\sum_{k=0}^{N-1}X[k]e^{i 2 \pi \frac{kn}{N}}, \quad \forall n \in \{0, 1, ..., N-1\}.">
 
-The DFT takes as input a discrete and finite amount of values and output a discrete and finite amount of values, so it can be evaluated using computers, unlike the DTFT. Below is a table with an overview of the different transforms.
+The DFT takes as input a discrete and finite amount of values and outputs a discrete and finite amount of values, so it can be evaluated using computers, unlike the DTFT. Below is a table with an overview of the different transforms.
 
 ![transforms](pics/transforms.png)
 
@@ -227,7 +278,8 @@ The discrete Fourier transform plays a huge role in DSP, and while the math theo
 
 The DFT is implemented in `numpy` under `numpy.fft.fft`. FFT stands for Fast Fourier Transform and is an optimized algorithm to calculate the DFT. The terms FFT and DFT are often used interchangeably.
 
-**Example**: Let's create a simple signal consisting of a sum of 2 sinusoids with different frequencies. You will see how the DFT is able to resolve the 2 components.
+### Example
+Let's create a simple signal consisting of a sum of 2 sinusoids with different frequencies. You will see how the DFT is able to resolve the 2 components.
 
 
 ```python
@@ -244,9 +296,11 @@ f = np.arange(n)/n*fs  # frequency axis; see details further below
 
 fig, axes = plt.subplots(1, 2, figsize=(14, 4))
 axes[0].plot(t, x)
-axes[0].set_title('time domain')
+axes[0].set_title('Time domain')
+axes[0].set_xlabel('Time (s)')
 axes[1].plot(f, np.abs(X))  # we plot the magnitude as X is complex
-axes[1].set_title('frequency domain')
+axes[1].set_title('Frequency domain')
+axes[1].set_xlabel('Frequency (Hz)')
 
 plt.show()  # you should see two clean spikes at locations corresponding to f1 and f2
 # you should also see two extra spikes at fs-f1 and fs-f2; see details further below
@@ -254,7 +308,7 @@ plt.show()  # you should see two clean spikes at locations corresponding to f1 a
 
 
     
-![png](README_files/README_8_0.png)
+![png](README_files/README_9_0.png)
     
 
 
@@ -282,10 +336,85 @@ FAQ:
     * I do as follows:
         * I remember the resolution is always <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{N}"> and build the entire frequency vector of length <img src="https://render.githubusercontent.com/render/math?math=N"> including the frequencies above <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}"> (or negative frequencies): `f = np.arange(n)/n*fs`
         * I find the frequencies strictly above <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}">: `mask = f > fs/2`
-            * If I want a one-sided spectrum I discard them: `f = f[mask]`
+            * If I want a one-sided spectrum I discard them: `f = f[~mask]`
             * If I want a two-sided spectrum I subtract <img src="https://render.githubusercontent.com/render/math?math=f_s"> to them: `f[mask] -= fs`
       
       This will consistently give a correct frequency axis regardless of <img src="https://render.githubusercontent.com/render/math?math=N"> being even or odd. You can also use the `numpy.fft.fftfreq` or `np.fft.rfftfreq` functions.
+
+### Examples
+
+Below I plot a series of common Fourier transforms.
+
+
+```python
+n_rows = 8
+fig, axes = plt.subplots(n_rows, 2, figsize=(12.5, 9))
+axes[0, 0].set_title('Time domain')
+axes[0, 1].set_title('Frequency domain')
+for row in range(n_rows-1):
+    axes[row, 0].set_xticklabels([])
+    axes[row, 1].set_xticklabels([])
+
+n = 512
+t = np.arange(n) - n//2
+f = np.fft.fftfreq(n); f = np.fft.fftshift(f)
+
+def plot_row(row, x, ylabel):
+    X = np.fft.fft(x); X = np.fft.fftshift(X)
+    axes[row, 0].plot(t, x)
+    axes[row, 1].plot(f, abs(X))
+    axes[row, 0].set_ylabel(ylabel)
+
+# dirac
+x = np.zeros(n); x[n//2] = 1
+plot_row(0, x, 'dirac')
+
+# constant
+x = np.ones(n)
+plot_row(1, x, 'constant')
+
+# rectangle
+x = abs(t) < n*0.025
+plot_row(2, x, 'rectangle')
+
+# sinc
+x = np.sinc(t*0.1)
+plot_row(3, x, 'sinc')
+
+# comb
+x = np.zeros(n); x[t%(n//32)==0] = 1
+plot_row(4, x, 'comb')
+
+# sine
+x = np.sin(2*np.pi*t*0.05)
+plot_row(5, x, 'sine')
+
+# cosine
+x = np.cos(2*np.pi*t*0.05)
+plot_row(6, x, 'cosine')
+
+# sawtooth
+x = (t*0.1 + 1) % 2 - 1
+plot_row(7, x, 'sawtooth')
+
+fig.tight_layout()
+plt.show()
+```
+
+
+    
+![png](README_files/README_11_0.png)
+    
+
+
+A few important Fourier transforms (FT) to note here:
+* The FT of a Dirac impulse is an infinitely-long rectangular window. Conversely, the FT of an infinitely-long rectangular window is a Dirac impulse.
+    * This again has to do with the **time-frequency duality**. A signal that is very narrow in time is very broad in frequency. Conversely, a signal that is very localized in frequency is very broad in time.
+* The FT of a rectangular window is a sinc function (the time-domain plot is the absolute value which is why it's not exactly a sinc). Conversely, the FT of a sinc function is a rectangular window.
+    * In accordance with the time-frequency duality, the narrower the rectangular window in one domain, the wider the sinc function in the other domain.
+* The FT of a Dirac comb is also a Dirac comb!
+    * This will show useful when explaining the Nyquist-Shannon sampling theorem further below.
+* The FT of the sawtooth signal shows decaying spikes equally spaced at multiples of the fundamental frequency, in accordance with the Fourier series expression introduced further above!
 
 # Convolution theorem
 
@@ -300,7 +429,7 @@ This is quite powerful as it means we can decide to derive a convolution, which 
 
 <img src="https://render.githubusercontent.com/render/math?math=x*y = \mathcal{F}^{-1}(\mathcal{F}(x)\mathcal{F}(y)).">
 
-This means we can perform a multiplication in the frequency domain and use back and forth Fourier transforms between the time and frequency domain to obtain the same result as a convolution in the time domain.
+This means we can perform a multiplication in the frequency domain and use back and forth Fourier transforms between the time and frequency domains to obtain the same result as a convolution in the time domain.
 
 Now for discrete signals, let <img src="https://render.githubusercontent.com/render/math?math=x[n]"> and <img src="https://render.githubusercontent.com/render/math?math=y[n]"> two signals of length <img src="https://render.githubusercontent.com/render/math?math=N">. With <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}"> the DFT operator and <img src="https://render.githubusercontent.com/render/math?math=*"> the discrete convolution operator, we have
 
@@ -358,7 +487,7 @@ plt.show()  # you should observe the curves overlap in both plots
 
 
     
-![png](README_files/README_11_0.png)
+![png](README_files/README_14_0.png)
     
 
 
@@ -394,7 +523,7 @@ plt.show()
 
 
     
-![png](README_files/README_13_0.png)
+![png](README_files/README_16_0.png)
     
 
 
@@ -427,7 +556,7 @@ plt.show()
 
 
     
-![png](README_files/README_15_0.png)
+![png](README_files/README_18_0.png)
     
 
 
@@ -447,7 +576,7 @@ Now it can be shown that the Fourier transform of a Dirac comb is also a Dirac c
 
 Therefore, sampling in the time-domain is the same as convolving with a Dirac comb in the frequency domain. And convolving with a Dirac comb is the same as replicating the signal infinitely, with replicas evenly spaced by <img src="https://render.githubusercontent.com/render/math?math=\omega_s">.
 
-The image below describes this. In the image, <img src="https://render.githubusercontent.com/render/math?math=X_a(\omega)"> is an example spectrum of the original continuous signal <img src="https://render.githubusercontent.com/render/math?math=x(t)">, while <img src="https://render.githubusercontent.com/render/math?math=X_\delta(\omega)"> is the spectrum of the sampled signal <img src="https://render.githubusercontent.com/render/math?math=(\text{III}_{T_s}x)(t)">. Since <img src="https://render.githubusercontent.com/render/math?math=x"> is real-valued, <img src="https://render.githubusercontent.com/render/math?math=X_a(\omega)"> is symmetric around <img src="https://render.githubusercontent.com/render/math?math=\omega=0">. You can see the spectrum is replicated infinitely along the frequency axis, with copies evenly spaced by <img src="https://render.githubusercontent.com/render/math?math=\omega_s">. The highest frequency component of the original signal is <img src="https://render.githubusercontent.com/render/math?math=\omega_\max">.
+The image below describes this. In the image, <img src="https://render.githubusercontent.com/render/math?math=X_a(\omega)"> is an example spectrum of the original continuous signal <img src="https://render.githubusercontent.com/render/math?math=x(t)">, while <img src="https://render.githubusercontent.com/render/math?math=X_\delta(\omega)"> is the spectrum of the sampled signal <img src="https://render.githubusercontent.com/render/math?math=(\text{III}_{T_s}x)(t)">. Since <img src="https://render.githubusercontent.com/render/math?math=x(t)"> is real-valued, <img src="https://render.githubusercontent.com/render/math?math=X_a(\omega)"> is symmetric around <img src="https://render.githubusercontent.com/render/math?math=\omega=0">. You can see the spectrum is replicated infinitely along the frequency axis, with copies evenly spaced by <img src="https://render.githubusercontent.com/render/math?math=\omega_s">. The highest frequency component of the original signal is <img src="https://render.githubusercontent.com/render/math?math=\omega_\max">.
 
 ![nyquist](pics/nyquist.png)
 
@@ -457,7 +586,7 @@ We can see now that if we have <img src="https://render.githubusercontent.com/re
 
 # Short-time Fourier transform
 
-Imagine we wish to perform the spectral analysis of a short audio recording of 1 second. At 44.1 kHz, which is a common audio sampling rate, this audio recording would consist of 44100 samples. One way to proceed would be to do perform the 44100-point FFT of the entire signal in one go, and end with a 44100 frequency bins-long spectrum.
+Imagine we wish to perform the spectral analysis of a short audio recording of 1 second. At 44.1 kHz, which is a common audio sampling rate, this audio recording would consist of 44100 samples. One way to proceed would be to perform the 44100-point FFT of the entire signal in one go, and end with a 44100 frequency bins-long spectrum.
 
 This is a bit silly, as on top of a 44100-point FFT being expensive (the FFT complexity is <img src="https://render.githubusercontent.com/render/math?math=O(N\log N)"> at best and <img src="https://render.githubusercontent.com/render/math?math=O(N^2)"> at worst), we rarely need such a fine description of the signal spectrum in the frequency domain. And this is a 1 second-long signal only.
 
@@ -469,12 +598,12 @@ The STFT is implemented in `scipy` under `scipy.signal.stft`. In the example bel
 ```python
 from scipy.signal import stft
 
-fs = 4e3
+fs = 4e3  # sampling frequency
 f_mod = 1  # modulation frequency
 f_delta = 200  # modulation depth
-f0 = 800
-T = 5
-t = np.arange(0, T, 1/fs)
+f0 = 800  # carrier frequency
+T = 5  # signal duration
+t = np.arange(0, T, 1/fs)  # time vector
 x = np.sin(2*np.pi*t*f0 + f_delta/f_mod*np.sin(2*np.pi*t*f_mod))
 
 fig, axes = plt.subplots(3, 1, figsize=(12, 7))
@@ -505,12 +634,12 @@ plt.show()
 
 
     
-![png](README_files/README_18_0.png)
+![png](README_files/README_21_0.png)
     
 
 
 FAQ
-* *What if I still want to have representation of my signal that depends only on frequency? E.g. if I am interested in the average energy in each frequency bin?*
+* *What if I still want to have a representation of my signal that depends only on frequency? E.g. if I am interested in the average energy in each frequency bin?*
     * You can still use the STFT and average the energy across frames! This is the Long-Term Average Spectrum (LTAS) and is a cleaner way to visualize the signal energy in each frequency bin.
 
 
@@ -541,14 +670,14 @@ plt.show()
 
 
     
-![png](README_files/README_20_0.png)
+![png](README_files/README_23_0.png)
     
 
 
 * *But the magnitude (y-axis) does not match!*
     * There are different ways of normalizing the FFT and the STFT which are not always documented. Here the STFT implementation of `scipy` evidently applies a normalization whereas `np.fft.fft` does not. There is also windowing coming into play here which I didn't cover. Ultimately this does not matter so much as the most important is the location of the peaks and their relative difference.
-* *How do I chose the length of the frame/window (`nperseg` option)?*
-    * This is up to you. A shorter frame size will give you a better time resolution, but a worse frequency resolution. Conversely a longer frame gives a worse time resolution, but a better frequency resolution. However the FFT is the fastest for signal lengths equal to a power of 2. So common frame sizes for audio analysis are e.g. 256, 512, 1024, 2048 or 4096, depending on the sampling rate. For other applications with different sampling rates, frame sizes must be adapted consequently.
+* *How do I chose the length of the frame/window (`nperseg` argument)?*
+    * This is up to you. A shorter frame size will give you a better time resolution, but a worse frequency resolution. Conversely a longer frame gives a worse time resolution, but a better frequency resolution. This is again the **time-frequency duality**. However the FFT is the fastest for signal lengths equal to a power of 2. So common frame sizes for audio analysis are e.g. 256, 512, 1024, 2048 or 4096, depending on the sampling rate. For other applications with different sampling rates, frame sizes must be adapted consequently.
 
 # Filters
 
@@ -601,7 +730,7 @@ Note that we usually force <img src="https://render.githubusercontent.com/render
 
 <img src="https://render.githubusercontent.com/render/math?math=y[n] = \frac{1}{L}(x[n]%2Bx[n-1]%2B...%2Bx[n-L%2B1]).">
 
-  Here <img src="https://render.githubusercontent.com/render/math?math=a_0=1"> and <img src="https://render.githubusercontent.com/render/math?math=b_m=\frac{1}{L}"> if <img src="https://render.githubusercontent.com/render/math?math=m\in\{0, 1, ..., L-1\}">. The filter order is <img src="https://render.githubusercontent.com/render/math?math=L-1">.
+  Here <img src="https://render.githubusercontent.com/render/math?math=a_0=1"> and <img src="https://render.githubusercontent.com/render/math?math=b_m=\frac{1}{L}"> for <img src="https://render.githubusercontent.com/render/math?math=m\in\{0, 1, ..., L-1\}">. The filter order is <img src="https://render.githubusercontent.com/render/math?math=L-1">.
 
 * Exponential smoothing with smoothing factor <img src="https://render.githubusercontent.com/render/math?math=0<\alpha<1">:
 
@@ -647,7 +776,48 @@ Trying to write the impulse response would look like this,
 
 <img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} h[n] %26= \mathcal{H}(\delta[n]) \\ %26= \alpha\mathcal{H}(\delta[n-1]) %2B (1-\alpha)\delta[n] \\ %26= \alpha^2\mathcal{H}(\delta[n-2]) %2B \alpha(1-\alpha)\delta[n-1] %2B (1-\alpha)\delta[n] \\ %26= \alpha^3\mathcal{H}(\delta[n-3]) %2B \alpha^2(1-\alpha)\delta[n-2] %2B \alpha(1-\alpha)\delta[n-1] %2B (1-\alpha)\delta[n] \\ %26=\ ... \end{aligned}">
 
-As you can see this would never end.
+As you can see this would never end. Also if <img src="https://render.githubusercontent.com/render/math?math=\alpha>1">, the output would explode and the filter would be unstable.
+
+### Example
+
+Digital filtering is implemented under `scipy.signal.lfilter`. The function takes as arguments the sequence of feedforward coefficients, the sequence of feedback coefficients and the input signal. Note the first feedforward coefficient, i.e. <img src="https://render.githubusercontent.com/render/math?math=a_0">, must be 1.
+
+Below I filter a noisy signal with a moving average filter and an exponential smoothing filter using `scipy.signal.lfilter`.
+
+
+```python
+from scipy.signal import lfilter
+
+# an arbitrary noisy input signal
+n = 512  # signal length
+x = 0.5*np.random.randn(n) + np.cos(2*np.pi*np.arange(n)*0.01) + np.cos(2*np.pi*np.arange(n)*0.005)
+
+# moving average filter
+L = 10  # number of points to average
+b = np.ones(L)/L  # feedforward coefficients
+a = [1]  # feedback coefficients
+y1 = lfilter(b, a, x)
+
+# exponential smoothing filter
+alpha = 0.9
+b = [1-alpha]  # feedforward coefficients
+a = [1, -alpha]  # feedback coefficients
+y2 = lfilter(b, a, x)
+
+fig, ax = plt.subplots(figsize=(13, 4))
+ax.plot(x, label='input signal', alpha=0.7)
+ax.plot(y1, label='moving average')
+ax.plot(y2, label='exponential smoothing')
+ax.legend()
+fig.tight_layout()
+plt.show()
+```
+
+
+    
+![png](README_files/README_34_0.png)
+    
+
 
 ## Filter frequency response
 
@@ -657,13 +827,13 @@ We saw above that a filter can be characterized with the impulse response; filte
 
 <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is the frequency response of the filter. It's another description of the filter, this time in the frequency domain. It describes how each frequency component is modified in gain and phase.
 
-Another way to look at it is as follows. Consider a **FIXED** <img src="https://render.githubusercontent.com/render/math?math=\omega\in\mathbb{R}">, and <img src="https://render.githubusercontent.com/render/math?math=x[n]=e^{i\omega n}">. That is, <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is a digital signal consisting of a single pure tone (single complex exponential, single component) at normalized frequency <img src="https://render.githubusercontent.com/render/math?math=\omega">. The output of the filter is then
+Another way to look at it is as follows. Consider a **FIXED** <img src="https://render.githubusercontent.com/render/math?math=\omega\in\mathbb{R}">, and <img src="https://render.githubusercontent.com/render/math?math=x[n]=e^{i\omega n}">. That is, <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is a digital signal consisting of a single pure tone (single complex exponential, single component) at frequency <img src="https://render.githubusercontent.com/render/math?math=\omega">. The output of the filter is then
 
 <img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} y[n] %26= h[n]*x[n] \\ %26= \sum_{m=-\infty}^{\infty}h[m]x[n-m] \\ %26= \sum_{m=-\infty}^{\infty}h[m]e^{i\omega(n-m)} \\ %26= e^{i\omega n}\sum_{m=-\infty}^{\infty}h[m]e^{-i\omega m} \\ %26= e^{i\omega n}\ \text{DTFT}(h[n]) \\ %26= e^{i\omega n}H(\omega) \\ %26= x[n]H(\omega) \\ \end{aligned}">
 
 *I apologize to math purists; yes, we are multiplying <img src="https://render.githubusercontent.com/render/math?math=x[n]"> which lives in the time domain with <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> which lives in the frequency domain! The reason is that this time, <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> refers to the value taken by <img src="https://render.githubusercontent.com/render/math?math=H"> on <img src="https://render.githubusercontent.com/render/math?math=\omega">, and not the function <img src="https://render.githubusercontent.com/render/math?math=H"> itself. This is why I emphasized on <img src="https://render.githubusercontent.com/render/math?math=\omega"> being fixed. <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is still referring to the function <img src="https://render.githubusercontent.com/render/math?math=x"> though.*
 
-As we can see, the pure tone <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is simply multiplied by <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Since <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is complex, this means <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is transformed both in magnitude and in phase. In other words, the output is also a pure tone, only scaled and shifted. If we now instead consider an arbitrary input and think of it as an infinite sum of complex exponentials at different frequencies, and we remember filter are linear systems, then the output is simply the sum of all the components individually scaled and shifted according to the function <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Which is why a description like <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is so powerful. Beautiful, isn't it?
+As we can see, the pure tone <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is simply multiplied by <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Since <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is complex, this means <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is transformed both in magnitude and in phase. In other words, the output is also a pure tone at the same frequency, only scaled and shifted. If we now instead consider an arbitrary input and think of it as an infinite sum of complex exponentials at different frequencies, and we remember filters are linear systems, then the output is simply the sum of all the components individually scaled and shifted according to the function <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Which is why a description like <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is so powerful. Beautiful, isn't it?
 
 * *But what if the filter is an IIR filter? For an FIR filter, <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> can be obtained by calculating the DTFT of the impulse response, which is simply the sequence of feedforward coefficients. But for an IIR, the impulse response is infinite!*
 
@@ -671,4 +841,65 @@ We can still define the frequency response as follows. We saw above that if <img
 
 <img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} %26%26 %26\sum_{m=0}^{N}a_my[n-m] = \sum_{m=0}^{M}b_mx[n-m] \\ %26%26\implies %26\sum_{m=0}^{N}a_me^{i\omega (n-m)}H(\omega) = \sum_{m=0}^{M}b_me^{i\omega (n-m)} \\ %26%26\implies %26H(\omega)e^{i\omega n}\sum_{m=0}^{N}a_me^{-i\omega m} = e^{i\omega n}\sum_{m=0}^{M}b_me^{-i\omega m} \\ %26%26\implies %26H(\omega)=\frac{\sum_{m=0}^{M}b_me^{-i\omega m}}{\sum_{m=0}^{N}a_me^{-i\omega m}} \\ \end{aligned}">
 
-Note that if there are no feedback coefficients except <img src="https://render.githubusercontent.com/render/math?math=a_0=1"> (case of an FIR filter), then only the numerator remains, which is again the Fourier transform of the sequence of feedforward coefficients!
+Note that if there are no feedback coefficients except <img src="https://render.githubusercontent.com/render/math?math=a_0=1"> (case of an FIR filter), then only the numerator remains, and we correctly obtain the DTFT of the sequence of feedforward coefficients (assuming <img src="https://render.githubusercontent.com/render/math?math=b_m=0"> for <img src="https://render.githubusercontent.com/render/math?math=m \notin \{0,1,...,M\}"> so the sum extends to infinity)!
+
+## Example
+
+A filter frequency response can be calculated using `scipy.signal.freqz`. The function takes as arguments the sequence of feedforward coefficients and the sequence of feedback coefficients. It can also take the number of evenly-spaced frequency points `worN` at which to calculate the frequency response. The function outputs a frequency vector and the complex frequency response. Note the frequency vector ranges from 0 to <img src="https://render.githubusercontent.com/render/math?math=\pi">, so you then have to scale it so that it ranges from <img src="https://render.githubusercontent.com/render/math?math=0"> to <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}">, depending on the sampling frequency <img src="https://render.githubusercontent.com/render/math?math=f_s"> you are working at. Or you can provide the `fs` argument to `scipy.signal.freqz` and the frequency vector output will be correctly scaled.
+
+Let's calculate the frequency responses of the moving average and the exponential smoothing filters.
+
+
+```python
+from scipy.signal import freqz
+
+# moving average filter
+L = 10  # number of points to average
+b = np.ones(L)/L  # feedforward coefficients
+a = [1]  # feedback coefficients
+w1, h1 = freqz(b, a)
+
+# exponential smoothing filter
+alpha = 0.9
+b = [1-alpha]  # feedforward coefficients
+a = [1, -alpha]  # feedback coefficients
+w2, h2 = freqz(b, a)
+
+fig, ax = plt.subplots(figsize=(12, 4))
+ax.plot(w1, abs(h1), label='moving average')
+ax.plot(w2, abs(h2), label='exponential smoothing')
+ax.legend()
+fig.tight_layout()
+plt.show()
+```
+
+
+    
+![png](README_files/README_37_0.png)
+    
+
+
+We can see both filters act as low-pass filters. They present a high gain that is close to 1 at low frequencies, and the gain decreases as the frequency increases. This means the filter attenuates high frequencies, while it lets the low frequencies pass through. This makes sense, as a moving-average filter smooths out the fast and noisy fluctuations, which are high frequencies. Same can be said about the exponential filter.
+
+FAQ:
+* Can I use `np.fft.fft` instead of `scipy.signal.freqz` to plot the frequency response?
+    * Yes, but no. Yes because `scipy.signal.freqz` uses `np.fft.fft` inside it and you can technically obtain the correct result after cropping the negative frequencies from the output of `np.fft.fft`, provided you provide a sufficient number of points `n` to `np.fft.fft`. But don't do it. `scipy.signal.freqz` is meant specifically for filters; it takes coefficients `b` and `a` as arguments and outputs a one-sided, well-defined frequency response. Using `scipy.signal.freqz` for a filter shows you are understanding what is happening.
+* Can I use `scipy.signal.freqz` to plot a signal spectrum?
+    * **NOOOOOOO**. `scipy.signal.freqz` plots a **frequency response**. A signal presents a **spectrum**, not a frequency response. A filter is a **system**, it takes signals as input/output and thus presents a **frequency response**, not a spectrum. Filter = frequency response, signal = spectrum. If you use `scipy.signal.freqz` to plot the frequency content of a signal, you are clearly showing you are not understanding this subtlety. In practice what would happen if you use `scipy.signal.freqz` for a signal is, since signal lengths are generally much larger than the number of frequency bins `worN` we wish to analyze (`worN` is 512 by default), the signal would be cropped and only the first `worN` samples would be analyzed! So for signal spectrums, please use `scipy.signal.stft` and average the energy across time-frames (see LTAS above), or use `np.fft.fft` on the whole signal if you are too lazy.
+
+# Postface
+
+I tried to cover here some fundamental DSP aspects in the quickest possible way, with an emphasis on practical implementation in Python. There are tons of other important subjects I didn't cover, like
+* windowing
+* spectral leakage
+* filter design
+* biquad filters
+* Z-transform
+* power spectral density
+
+but it would take me too long, and I need to stop myself at some point. Nonetheless the subjects mentioned above are a good leads if you are interested in knowing more about DSP.
+
+# References
+
+* [Sascha Spors, Digital Signal Processing - Lecture notes featuring computational examples.](https://nbviewer.jupyter.org/github/spatialaudio/digital-signal-processing-lecture/blob/master/index.ipynb)
+* Lecture notes on [22001 Acoustic signal processing](https://kurser.dtu.dk/course/22001) by Tobias May

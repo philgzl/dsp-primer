@@ -897,7 +897,9 @@ I tried to cover here some fundamental DSP aspects in the quickest possible way,
 * Z-transform
 * power spectral density
 
-but it would take me too long, and I need to stop myself at some point. Nonetheless the subjects mentioned above are a good leads if you are interested in knowing more about DSP.
+but it would take me too long, and I need to stop myself at some point. Nonetheless the subjects mentioned above are good leads if you are interested in knowing more about DSP.
+
+If you find typos, I would greatly appreciate it if you reported them ❤️.
 
 # References
 

@@ -1,8 +1,13 @@
+'''
+A script used to post-process the README.md output from nbconvert.
+Namely it formats LaTeX formulas so they are rendered in GitHub.
+'''
+
 math_mode = False
 code_mode = False
 indexes = []
 
-with open('README.md') as f:
+with open('README.md', encoding='utf8') as f:
     content = f.read()
 
 new_content = ''
@@ -34,5 +39,5 @@ while i < len(content):
         new_content += content[i]
     i += 1
 
-with open('README.md', 'w') as f:
+with open('README.md', 'w', encoding='utf8') as f:
     f.write(new_content)

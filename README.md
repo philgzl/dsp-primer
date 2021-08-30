@@ -181,7 +181,7 @@ The Fourier coefficients here are
 
 * <img src="https://render.githubusercontent.com/render/math?math=c_k = \frac{i}{\pi}\frac{(-1)^k}{k}"> if <img src="https://render.githubusercontent.com/render/math?math=k>0">,
 
-* <img src="https://render.githubusercontent.com/render/math?math=c_k = -\frac{i}{\pi}\frac{(-1)^k}{k}"> if <img src="https://render.githubusercontent.com/render/math?math=k<0">,'
+* <img src="https://render.githubusercontent.com/render/math?math=c_k = -\frac{i}{\pi}\frac{(-1)^k}{k}"> if <img src="https://render.githubusercontent.com/render/math?math=k<0">,
 
 * <img src="https://render.githubusercontent.com/render/math?math=c_0 = 0"> if <img src="https://render.githubusercontent.com/render/math?math=k=0">.
 

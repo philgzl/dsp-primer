@@ -41,7 +41,7 @@ where <img src="https://render.githubusercontent.com/render/math?math=T_s"> is t
 
 **Example**: common audio sampling frequencies are 8 kHz (telecommunications), 44.1 kHz (music CDs) and 48 kHz (movie tracks).
 
-**Note**: for math purists, these notations can seem abusive. In signal processing, notations like <img src="https://render.githubusercontent.com/render/math?math=x(t)"> are widely used to refer to a continuous signal or function, without introducing <img src="https://render.githubusercontent.com/render/math?math=t">. In other words, <img src="https://render.githubusercontent.com/render/math?math=x(t)"> does not refer to the value taken by <img src="https://render.githubusercontent.com/render/math?math=x"> at <img src="https://render.githubusercontent.com/render/math?math=t">, but refers to the function <img src="https://render.githubusercontent.com/render/math?math=x">. Similarly, <img src="https://render.githubusercontent.com/render/math?math=x[n]"> refers to the function defined on the discrete domain. The usage of brackets is widely used to distinguish discrete signals from analog signals.
+**Note**: In signal processing, notations like <img src="https://render.githubusercontent.com/render/math?math=x(t)"> are widely used to refer to a continuous signal or function, without introducing <img src="https://render.githubusercontent.com/render/math?math=t">. In other words, <img src="https://render.githubusercontent.com/render/math?math=x(t)"> does not refer to the value taken by <img src="https://render.githubusercontent.com/render/math?math=x"> at <img src="https://render.githubusercontent.com/render/math?math=t">, but refers to the function <img src="https://render.githubusercontent.com/render/math?math=x"> of the dependent variable <img src="https://render.githubusercontent.com/render/math?math=t">. Similarly, <img src="https://render.githubusercontent.com/render/math?math=x[n]"> refers to the function defined on the discrete domain. The usage of brackets is widely used to distinguish discrete signals from analog signals.
 
 **Note**: the signals above were introduced as taking values in <img src="https://render.githubusercontent.com/render/math?math=\mathbb{R}"> but they can also take values in <img src="https://render.githubusercontent.com/render/math?math=\mathbb{C}">.
 
@@ -244,10 +244,12 @@ A few notes/properties:
 * The Fourier transform takes **complex** values
 * The Fourier transform is **linear**: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(\alpha x %2B \beta y)=\alpha\mathcal{F}(x)%2B\beta\mathcal{F}(y)">
 * It is common to note the Fourier transform of <img src="https://render.githubusercontent.com/render/math?math=x"> with an uppercase like this: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(x)=X">.
-    * Sometimes it is noted like this to emphasize on the dependent variable, even though that's abusive for math purists: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}[x(t)] = X(\omega)">
+    * Sometimes it is noted like this to emphasize on the dependent variable: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}[x(t)] = X(\omega)">
 * The inverse Fourier transform of X is <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}^{-1}(X)(t) = \frac{1}{2\pi}\int_{-\infty}^{%2B\infty}X(\omega)e^{i\omega t}d\omega, \quad \forall t \in \mathbb{R},"> which is the same as the forward Fourier transform except there is a normalization factor and a plus sign in the exponential.
 
 This was all in the continuous domain so far. Now, there is as rigorous formalism that I will skip that allows to adapt the continuous Fourier transform to digital signals while keeping *most* of its properties. We first define the discrete-time Fourier transform (DTFT), and then the discrete Fourier transform (DFT). I will go over this quickly without diving into the intricacies about how the validity of the properties is kept. But the properties are overall maintained and the underlying mechanism of all the Fourier transform variants is the same: we decompose signals into frequencies.
+
+If you wish a more complete explanation of steps between Fourier transform, DTFT and DFT, you can refer to [Proakis and Manolakis](#References), Chapters 4 and 7.
 
 ## Discrete-Time Fourier Transform (DTFT)
 
@@ -592,7 +594,33 @@ This is a bit silly, as on top of a 44100-point FFT being expensive (the FFT com
 
 What is more common to do is to frame the signal in the time domain into adjacent windows and perform the FFT of each window. This is called a Short-time Fourier transform (STFT). This means we can have a representation of the signal that is both a function of time (frame number) and frequency!
 
-The STFT is implemented in `scipy` under `scipy.signal.stft`. In the example below I generate a sinusoid whose frequency is modulated by another sinusoid. The FFT of the entire signal shows high values across the entire range of swept frequencies, while the STFT allows to observe how the frequency changes over time.
+The STFT of <img src="https://render.githubusercontent.com/render/math?math=x[n]"> noted <img src="https://render.githubusercontent.com/render/math?math=X[k,l]"> can be formally defined as follows,
+
+<img src="https://render.githubusercontent.com/render/math?math=X[k, l] = \sum_{n=0}^{M-1}\tilde{x}[n %2B kH]e^{-i2\pi\frac{kn}{M}},">
+
+where
+
+<img src="https://render.githubusercontent.com/render/math?math=\tilde{x}[n%2BkH]=\left\{\begin{aligned}%26x[n %2B kH]w[n]%26%26\text{if}\ n\in\{0,1,...,N-1\},\\%260%26%26\text{if}\ n\in\{N,N%2B1,...,M\},\end{aligned}\right.">
+
+and
+* <img src="https://render.githubusercontent.com/render/math?math=k"> is the frequency bin index <img src="https://render.githubusercontent.com/render/math?math=\in \{0, 1, ..., M-1\}">
+* <img src="https://render.githubusercontent.com/render/math?math=l"> is the frame index
+* <img src="https://render.githubusercontent.com/render/math?math=N"> is the frame length—it's the number of signal samples in each window
+* <img src="https://render.githubusercontent.com/render/math?math=H"> is the hop length—it's the number of signal samples between adjacent windows
+    * Sometimes the overlap length <img src="https://render.githubusercontent.com/render/math?math=O"> is specified instead: <img src="https://render.githubusercontent.com/render/math?math=O=N-R">
+* <img src="https://render.githubusercontent.com/render/math?math=w"> is the analysis window function of length <img src="https://render.githubusercontent.com/render/math?math=N">—it's commonly used to reduce spectral leakage
+    * I am not covering spectral leakage in this notebook but you can refer to [Oppenheim, Schafer and Buck](#References), Chapter 10
+* <img src="https://render.githubusercontent.com/render/math?math=M"> is the number of points after zero-padding the windows—it's also the number of FFT points
+
+The STFT is implemented in `scipy` under `scipy.signal.stft`,
+* the `nperseg` argument corresponds to <img src="https://render.githubusercontent.com/render/math?math=N">
+* the `noverlap` argument corresponds to <img src="https://render.githubusercontent.com/render/math?math=O">
+* the `nfft` argument corresponds to <img src="https://render.githubusercontent.com/render/math?math=M">
+* the `window` argument corresponds to <img src="https://render.githubusercontent.com/render/math?math=w">
+
+The function also takes as arguments the sampling frequency `fs` to return the corresponding time vector and frequency vector.
+
+In the example below I generate a sinusoid whose frequency is modulated by another sinusoid. The FFT of the entire signal shows high values across the entire range of swept frequencies, while the STFT allows to observe how the frequency changes over time.
 
 
 ```python
@@ -685,11 +713,11 @@ A filter is a system that performs mathematical operations on a signal in the ti
 
 Filters can be analog for continuous signals (electronic circuits consisting of capacitors and coils in e.g. a guitar amps or speaker crossover filters), or digital for discrete signals (integrated circuits). In this course we will only cover digital filters.
 
-In DSP, filters are linear time-invariant (LTI) systems. Consider two digital signals <img src="https://render.githubusercontent.com/render/math?math=x[n]"> and <img src="https://render.githubusercontent.com/render/math?math=y[n]">. For math purists, remember that <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is an abusive notation that refers to the function <img src="https://render.githubusercontent.com/render/math?math=x"> of the discrete dependent variable <img src="https://render.githubusercontent.com/render/math?math=n">, and not the value taken by <img src="https://render.githubusercontent.com/render/math?math=x"> on a single specific <img src="https://render.githubusercontent.com/render/math?math=n">. A system <img src="https://render.githubusercontent.com/render/math?math=\mathcal{H}"> is an LTI system if it verifies the following properties:
+In DSP, filters are linear time-invariant (LTI) systems. Consider two digital signals <img src="https://render.githubusercontent.com/render/math?math=x[n]"> and <img src="https://render.githubusercontent.com/render/math?math=y[n]"> (note that <img src="https://render.githubusercontent.com/render/math?math=x[n]"> refers to the function <img src="https://render.githubusercontent.com/render/math?math=x"> of the discrete dependent variable <img src="https://render.githubusercontent.com/render/math?math=n">, and not the value taken by <img src="https://render.githubusercontent.com/render/math?math=x"> on a fixed <img src="https://render.githubusercontent.com/render/math?math=n">). A system <img src="https://render.githubusercontent.com/render/math?math=\mathcal{H}"> is an LTI system if it verifies the following properties:
 * Linearity: <img src="https://render.githubusercontent.com/render/math?math=\forall\alpha,\beta\in\mathbb{R},\ \mathcal{H}(\alpha x[n]%2B\beta y[n])=\alpha\mathcal{H}(x[n])%2B\beta\mathcal{H}(y[n])">
-    * For math purists, this is the correct notation: <img src="https://render.githubusercontent.com/render/math?math=\forall\alpha,\beta\in\mathbb{R},\ \mathcal{H}(\alpha x%2B\beta y)=\alpha\mathcal{H}(x)%2B\beta\mathcal{H}(y)">
+    * Another way to write it is as follows: <img src="https://render.githubusercontent.com/render/math?math=\forall\alpha,\beta\in\mathbb{R},\ \mathcal{H}(\alpha x%2B\beta y)=\alpha\mathcal{H}(x)%2B\beta\mathcal{H}(y)">
 * Time-invariance: <img src="https://render.githubusercontent.com/render/math?math=\forall m\in\mathbb{Z},\ \mathcal{H}(x[n-m])=\mathcal{H}(x)[n-m]">
-    * For math purists, this is the correct notation: <img src="https://render.githubusercontent.com/render/math?math=\forall m\in\mathbb{Z},\ \mathcal{H}(n\mapsto x[n-m])=n\mapsto\mathcal{H}(x)[n-m]">
+    * Another way to write it is as follows: <img src="https://render.githubusercontent.com/render/math?math=\forall m\in\mathbb{Z},\ \mathcal{H}(n\mapsto x[n-m])=n\mapsto\mathcal{H}(x)[n-m]">
     * In other words, this means LTI systems do not change over time; if the input is delayed, the output is also delayed by the same amount.
 
 In the following, <img src="https://render.githubusercontent.com/render/math?math=x[n]"> denotes the input of the filter, while <img src="https://render.githubusercontent.com/render/math?math=y[n]"> denotes the output of the filter.
@@ -827,7 +855,7 @@ Another way to look at it is as follows. Consider a **FIXED** <img src="https://
 
 <img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} y[n] %26= h[n]*x[n] \\ %26= \sum_{m=-\infty}^{\infty}h[m]x[n-m] \\ %26= \sum_{m=-\infty}^{\infty}h[m]e^{i\omega(n-m)} \\ %26= e^{i\omega n}\sum_{m=-\infty}^{\infty}h[m]e^{-i\omega m} \\ %26= e^{i\omega n}\ \text{DTFT}(h[n]) \\ %26= e^{i\omega n}H(\omega) \\ %26= x[n]H(\omega) \\ \end{aligned}">
 
-*I apologize to math purists; yes, we are multiplying <img src="https://render.githubusercontent.com/render/math?math=x[n]"> which lives in the time domain with <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> which lives in the frequency domain! The reason is that this time, <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> refers to the value taken by <img src="https://render.githubusercontent.com/render/math?math=H"> on <img src="https://render.githubusercontent.com/render/math?math=\omega">, and not the function <img src="https://render.githubusercontent.com/render/math?math=H"> itself. This is why I emphasized on <img src="https://render.githubusercontent.com/render/math?math=\omega"> being fixed. <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is still referring to the function <img src="https://render.githubusercontent.com/render/math?math=x"> though.*
+**Note**: This time, <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> refers to the value taken by <img src="https://render.githubusercontent.com/render/math?math=H"> on the fixed <img src="https://render.githubusercontent.com/render/math?math=\omega">, and not the function <img src="https://render.githubusercontent.com/render/math?math=H"> of the dependent variable <img src="https://render.githubusercontent.com/render/math?math=\omega">. This is why I emphasized on <img src="https://render.githubusercontent.com/render/math?math=\omega"> being fixed previously. <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is still referring to the function <img src="https://render.githubusercontent.com/render/math?math=x"> though.
 
 As we can see, the pure tone <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is simply multiplied by <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Since <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is complex, this means <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is transformed both in magnitude and in phase. In other words, the output is also a pure tone at the same frequency, only scaled and shifted. If we now instead consider an arbitrary input and think of it as an infinite sum of complex exponentials at different frequencies, and we remember filters are linear systems, then the output is simply the sum of all the components individually scaled and shifted according to the function <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Which is why a description like <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is so powerful. Beautiful, isn't it?
 
@@ -886,7 +914,7 @@ FAQ:
 # Postface
 
 I tried to cover here some fundamental DSP aspects in the quickest possible way, with an emphasis on practical implementation in Python. There are tons of other important subjects I didn't cover, like
-* windowing
+* window functions
 * spectral leakage
 * filter design
 * biquad filters
@@ -899,5 +927,7 @@ If you find typos, I would greatly appreciate it if you reported them ❤️.
 
 # References
 
+* Alan V. Oppenheim, Ronald W. Schafer and John R. Buck. *Discrete-time signal processing* (2nd ed.). Prentice Hall, 1999.
+* John G. Proakis and Dimitris G. Manolakis. *Introduction to Digital Signal Processing : Principles, Algorithms and Applications* (4th ed.). Pearson Prentice Hall, 2007.
 * [Sascha Spors, Digital Signal Processing - Lecture notes featuring computational examples.](https://nbviewer.jupyter.org/github/spatialaudio/digital-signal-processing-lecture/blob/master/index.ipynb)
-* Lecture notes on [22001 Acoustic signal processing](https://kurser.dtu.dk/course/22001) by Tobias May
+* Lecture notes on [22001 Acoustic signal processing](https://kurser.dtu.dk/course/22001) by Tobias May at DTU

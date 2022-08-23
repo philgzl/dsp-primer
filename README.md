@@ -63,7 +63,7 @@ This will be useful in the following.
 
 The convolution is a mathematical operation between two functions and outputs a new function. It is a fundamental tool in signal processing. The convolution operator is noted <img src="https://render.githubusercontent.com/render/math?math=*"> and it is well defined for integrable functions in <img src="https://render.githubusercontent.com/render/math?math=L^1(\mathbb{R})">,
 
-<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} * \colon L^1(\mathbb{R}) \times L^1(\mathbb{R}) %26\longrightarrow L^1(\mathbb{R}) \\ f, g %26\longmapsto f * g. \end{aligned}">
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} * \colon L^1(\mathbb{R}) \times L^1(\mathbb{R}) %26\longrightarrow L^1(\mathbb{R}) \\ f, g %26\longmapsto f * g \end{aligned}">
 
 It is defined as
 
@@ -648,6 +648,7 @@ axes[1].set_ylabel('Magnitude')
 
 f, t, S = stft(x, fs, nperseg=512)
 
+axes[2].grid(False)
 axes[2].pcolormesh(t, f, abs(S), shading='gouraud')
 axes[2].set_title('STFT')
 axes[2].set_xlabel('Time (s)')
@@ -657,13 +658,9 @@ fig.tight_layout()
 plt.show()
 ```
 
-    /tmp/ipykernel_15125/2720074634.py:28: MatplotlibDeprecationWarning: Auto-removal of grids by pcolor() and pcolormesh() is deprecated since 3.5 and will be removed two minor releases later; please call grid(False) first.
-      axes[2].pcolormesh(t, f, abs(S), shading='gouraud')
-
-
 
     
-![png](README_files/README_23_1.png)
+![png](README_files/README_23_0.png)
     
 
 

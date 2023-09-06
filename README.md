@@ -31,7 +31,7 @@ In math terms, the sampling of a continuous signal can be described as follows. 
 
 <img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} x \colon \mathbb{R} %26\longrightarrow \mathbb{R} \\ t %26\longmapsto x(t). \end{aligned}">
 
-A digital representation of <img src="https://render.githubusercontent.com/render/math?math=x(t)"> noted <img src="https://render.githubusercontent.com/render/math?math=x[n]"> can be defined as follows,
+A digital representation of <img src="https://render.githubusercontent.com/render/math?math=x(t)"> denoted as <img src="https://render.githubusercontent.com/render/math?math=x[n]"> can be defined as follows,
 
 <img src="https://render.githubusercontent.com/render/math?math=x[n] = x(nT_s) , \quad \forall n \in \mathbb{Z},">
 
@@ -41,7 +41,7 @@ where <img src="https://render.githubusercontent.com/render/math?math=T_s"> is t
 
 **Example**: common audio sampling frequencies are 8 kHz (telecommunications), 44.1 kHz (music CDs) and 48 kHz (movie tracks).
 
-**Note**: In signal processing, notations like <img src="https://render.githubusercontent.com/render/math?math=x(t)"> are widely used to refer to a continuous signal or function, without introducing <img src="https://render.githubusercontent.com/render/math?math=t">. In other words, <img src="https://render.githubusercontent.com/render/math?math=x(t)"> does not refer to the value taken by <img src="https://render.githubusercontent.com/render/math?math=x"> at <img src="https://render.githubusercontent.com/render/math?math=t">, but refers to the function <img src="https://render.githubusercontent.com/render/math?math=x"> of the dependent variable <img src="https://render.githubusercontent.com/render/math?math=t">. Similarly, <img src="https://render.githubusercontent.com/render/math?math=x[n]"> refers to the function <img src="https://render.githubusercontent.com/render/math?math=x"> of the variable discrete variable <img src="https://render.githubusercontent.com/render/math?math=n">. The usage of brackets is widely used to distinguish discrete signals from analog signals.
+**Note**: In signal processing, notations like <img src="https://render.githubusercontent.com/render/math?math=x(t)"> are widely used to refer to a continuous signal or function, without introducing <img src="https://render.githubusercontent.com/render/math?math=t">. In other words, <img src="https://render.githubusercontent.com/render/math?math=x(t)"> does not refer to the value taken by <img src="https://render.githubusercontent.com/render/math?math=x"> at <img src="https://render.githubusercontent.com/render/math?math=t">, but refers to the function <img src="https://render.githubusercontent.com/render/math?math=x"> of the dependent variable <img src="https://render.githubusercontent.com/render/math?math=t">. Similarly, <img src="https://render.githubusercontent.com/render/math?math=x[n]"> refers to the function <img src="https://render.githubusercontent.com/render/math?math=x"> of the discrete variable <img src="https://render.githubusercontent.com/render/math?math=n">. The usage of brackets is widely used to distinguish discrete signals from analog signals.
 
 **Note**: the signals above were introduced as taking values in <img src="https://render.githubusercontent.com/render/math?math=\mathbb{R}"> but they can also take values in <img src="https://render.githubusercontent.com/render/math?math=\mathbb{C}">.
 
@@ -61,7 +61,7 @@ This will be useful in the following.
 
 # Convolution
 
-The convolution is a mathematical operation between two functions and outputs a new function. It is a fundamental tool in signal processing. The convolution operator is noted <img src="https://render.githubusercontent.com/render/math?math=*"> and it is well defined for integrable functions in <img src="https://render.githubusercontent.com/render/math?math=L^1(\mathbb{R})">,
+The convolution is a mathematical operation between two functions and outputs a new function. It is a fundamental tool in signal processing. The convolution operator is denoted as <img src="https://render.githubusercontent.com/render/math?math=*"> and it is well defined for integrable functions in <img src="https://render.githubusercontent.com/render/math?math=L^1(\mathbb{R})">,
 
 <img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} * \colon L^1(\mathbb{R}) \times L^1(\mathbb{R}) %26\longrightarrow L^1(\mathbb{R}) \\ f, g %26\longmapsto f * g \end{aligned}">
 
@@ -227,7 +227,7 @@ plt.show()  # you should see the more sines we add, the closer the total sum res
 
 The Fourier transform is a mathematical operation that decomposes functions depending on time into functions depending on frequency. The term *Fourier transform* can refer to both the frequency domain representation of a signal and the mathematical operation itself.
 
-The Fourier transform is first formally defined for continuous signals (not necessarily periodic) and outputs a new continuous function depending on frequency. It is commonly noted <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}"> and is defined as
+The Fourier transform is first formally defined for continuous signals (not necessarily periodic) and outputs a new continuous function depending on frequency. It is commonly denoted as <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}"> and is defined as
 
 <img src="https://render.githubusercontent.com/render/math?math=\begin{aligned} \mathcal{F} \colon L^1(\mathbb{R}) %26\longrightarrow L^1(\mathbb{R}) \\ f %26\longmapsto \begin{aligned}[t]     \mathcal{F}(x) \colon \mathbb{R} %26\longrightarrow \mathbb{C} \\     \omega %26\longmapsto \int_{-\infty}^{%2B\infty}x(t)e^{-i\omega t}dt. \end{aligned} \end{aligned}">
 
@@ -238,11 +238,11 @@ In other words, given <img src="https://render.githubusercontent.com/render/math
 This can be seen as the projection of <img src="https://render.githubusercontent.com/render/math?math=x"> onto the basis of complex exponentials.
 
 A few notes/properties:
-* The Fourier transform of <img src="https://render.githubusercontent.com/render/math?math=x"> is a function of <img src="https://render.githubusercontent.com/render/math?math=\omega"> which is a frequency variable in radian per second (rad/s). Sometimes, a frequency variable in Hertz and noted <img src="https://render.githubusercontent.com/render/math?math=f"> is used instead, in which case <img src="https://render.githubusercontent.com/render/math?math=\omega=2\pi f"> and the integral is changed accordingly.
+* The Fourier transform of <img src="https://render.githubusercontent.com/render/math?math=x"> is a function of <img src="https://render.githubusercontent.com/render/math?math=\omega"> which is a frequency variable in radian per second (rad/s). Sometimes, a frequency variable in Hertz and denoted as <img src="https://render.githubusercontent.com/render/math?math=f"> is used instead, in which case <img src="https://render.githubusercontent.com/render/math?math=\omega=2\pi f"> and the integral is changed accordingly.
 * The Fourier transform takes **complex** values
 * The Fourier transform is **linear**: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(\alpha x %2B \beta y)=\alpha\mathcal{F}(x)%2B\beta\mathcal{F}(y)">
-* It is common to note the Fourier transform of <img src="https://render.githubusercontent.com/render/math?math=x"> with an uppercase like this: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(x)=X">.
-    * Sometimes it is noted like this to emphasize on the dependent variables: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}[x(t)] = X(\omega)">
+* It is common to denote the Fourier transform of <img src="https://render.githubusercontent.com/render/math?math=x"> with an uppercase like this: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}(x)=X">.
+    * Sometimes it is denoted like this to emphasize on the dependent variables: <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}[x(t)] = X(\omega)">
 * The inverse Fourier transform of <img src="https://render.githubusercontent.com/render/math?math=X"> is <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}^{-1}(X)(t) = \frac{1}{2\pi}\int_{-\infty}^{%2B\infty}X(\omega)e^{i\omega t}d\omega, \quad \forall t \in \mathbb{R},"> which is the same as the forward Fourier transform except there is a normalization factor and a plus sign in the exponential.
 
 ## Discrete-Time Fourier transform (DTFT)
@@ -326,7 +326,7 @@ A few practical notes:
 
         <img src="https://render.githubusercontent.com/render/math?math=0,\ \frac{f_s}{N},\ ...,\ \frac{N-1}{2}\frac{f_s}{N},\ -\frac{N-1}{2}\frac{f_s}{N},\ ...,\ -\frac{f_s}{N}">
 
-      We first have the positive frequencies in increasing order up to <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}">, and then the negative frequencies increasing from <img src="https://render.githubusercontent.com/render/math?math=-\frac{f_s}{2}"> to 0. These frequency values are commonly called **frequency bins**, as if the energy is falling in *bins* centered at those frequencies. 
+      We first have the positive frequencies in increasing order up to <img src="https://render.githubusercontent.com/render/math?math=f_s">, and then the negative frequencies increasing from <img src="https://render.githubusercontent.com/render/math?math=-\frac{f_s}{2}"> to 0. These frequency values are commonly called **frequency bins**, as if the energy is falling in *bins* centered at those frequencies. 
 
 FAQ:
 * *But you drew positive frequencies in the frequency-domain plot above up to <img src="https://render.githubusercontent.com/render/math?math=\frac{f_s}{2}">!*
@@ -591,7 +591,7 @@ This is a bit silly, as on top of a 44100-point FFT being expensive (the FFT com
 
 What is more common to do is to segment the signal in the time domain and perform the FFT of each segment. This is called a Short-time Fourier transform (STFT). This means we can have a representation of the signal that is both a function of time (frame number) and frequency!
 
-The STFT of <img src="https://render.githubusercontent.com/render/math?math=x[n]"> noted <img src="https://render.githubusercontent.com/render/math?math=X[k,l]"> can be formally defined as
+The STFT of <img src="https://render.githubusercontent.com/render/math?math=x[n]"> denoted as <img src="https://render.githubusercontent.com/render/math?math=X[k,l]"> can be formally defined as
 
 <img src="https://render.githubusercontent.com/render/math?math=X[k, l] = \sum_{n=0}^{M-1}\tilde{x}[n %2B kH]e^{-i2\pi\frac{kn}{M}},">
 
@@ -855,7 +855,7 @@ Another way to look at it is as follows. Consider a fixed <img src="https://rend
 
 **Note**: Here <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> refers to the value taken by <img src="https://render.githubusercontent.com/render/math?math=H"> on the fixed <img src="https://render.githubusercontent.com/render/math?math=\omega">, and not the function <img src="https://render.githubusercontent.com/render/math?math=H"> of the dependent variable <img src="https://render.githubusercontent.com/render/math?math=\omega">. <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is still referring to the function <img src="https://render.githubusercontent.com/render/math?math=x"> though.
 
-As we can see, the pure tone <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is simply multiplied by <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Since <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is complex, this means <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is transformed both in magnitude and in phase. In other words, the output is also a pure tone at the same frequency, only scaled and shifted. If we now instead consider an arbitrary input and think of it as an infinite sum of complex exponentials at different frequencies, and we remember filters are linear systems, then the output is simply the sum of all the components individually scaled and shifted according to the function <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Which is why a description like <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is so powerful. Beautiful, isn't it?
+As we can see, the pure tone <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is simply multiplied by <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Since <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is complex, this means <img src="https://render.githubusercontent.com/render/math?math=x[n]"> is transformed both in magnitude and in phase. In other words, the output is also a pure tone at the same frequency, only scaled and shifted. If we now instead consider an arbitrary input and think of it as an infinite sum of complex exponentials at different frequencies, and we remember filters are linear systems, then the output is simply the sum of all the components individually scaled and shifted according to the function <img src="https://render.githubusercontent.com/render/math?math=H(\omega)">. Which is why a description like <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> is so powerful.
 
 * *But what if the filter is an IIR filter? For an FIR filter, <img src="https://render.githubusercontent.com/render/math?math=H(\omega)"> can be obtained by calculating the DTFT of the impulse response, which is simply the sequence of feedforward coefficients. But for an IIR, the impulse response is infinite!*
 
@@ -907,7 +907,7 @@ FAQ:
 * Can I use `np.fft.fft` instead of `scipy.signal.freqz` to plot the frequency response?
     * Technically yes, but I don't recommend it. `scipy.signal.freqz` uses `np.fft.fft` inside it. You can obtain the correct result with `np.fft.fft` if you discard the negative frequencies and you provide a sufficient number of FFT points `n`. But I recommend using `scipy.signal.freqz` instead, since it's specifically meant for filters; it takes coefficients `b` and `a` as arguments and outputs a one-sided, well-defined frequency response. Using `scipy.signal.freqz` for a filter shows you understand what you are doing.
 * Can I use `scipy.signal.freqz` to plot a signal spectrum?
-    * **NOOOOOOO**. `scipy.signal.freqz` plots a **frequency response**. A signal presents a **spectrum**, not a frequency response. A filter is a system, it takes signals as input/output and thus presents a **frequency response**, not a spectrum. Filter = frequency response, signal = spectrum. If you use `scipy.signal.freqz` to plot the frequency content of a signal, you are clearly showing you are not understanding what you are doing. What would happen if you use `scipy.signal.freqz` for a signal is that, since signal lengths are generally much larger than the number of frequency bins `worN` we wish to analyze (`worN` is 512 by default), the signal would be cropped and only the first `worN` samples would be analyzed! So for signal spectrums, please use `scipy.signal.stft` and average the energy across time-frames (see LTAS earlier), or use `np.fft.fft` on the whole signal (not recommended).
+    * No! A signal presents a **spectrum** (not a frequency response), while a filter is a system that has input/output signals and thus presents a **frequency response** (not a spectrum). Filter <img src="https://render.githubusercontent.com/render/math?math=\sim"> frequency response, signal <img src="https://render.githubusercontent.com/render/math?math=\sim"> spectrum. If you use `scipy.signal.freqz` to plot the frequency content of a signal, then the signal would be cropped and only the first `worN` samples would be analyzed, since signal lengths are generally much larger than the number of frequency bins `worN` we wish to analyze (`worN` is 512 by default)! So for signal spectrums, please use `scipy.signal.stft` and average the energy across time-frames (see LTAS earlier), or use `np.fft.fft` on the whole signal (not recommended).
 
 # Postface
 

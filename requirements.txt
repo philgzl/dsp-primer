@@ -1,4 +1,6 @@
-notebook
+notebook==6.5.5
 matplotlib
 numpy
 scipy
+jupyter_contrib_nbextensions
+nbconvert
